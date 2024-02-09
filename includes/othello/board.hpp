@@ -70,6 +70,11 @@ namespace othello {
             ~Board();
 
             /**
+             * Resets the board to its start state
+            */
+            void newGame();
+
+            /**
              * Getter for case by array index
             */
             pawn getCase(int index) const;

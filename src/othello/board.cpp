@@ -113,6 +113,16 @@ void Board::getPawnNumbers(int arr[3]) const {
     }
 }
 
+void Board::newGame() {
+    for(int i = 0 ; i < Board::length ; i++){
+        this->cases[i] = pawn::empty;
+    }
+    this->setCase("d4",othello::pawn::white);
+    this->setCase("e5",othello::pawn::white);
+    this->setCase("e4",othello::pawn::black);
+    this->setCase("d5",othello::pawn::black);
+}
+
 // ------------------------------------------------------------------------------------
 
 int Board::coord2Index(const std::string& coordinate) {

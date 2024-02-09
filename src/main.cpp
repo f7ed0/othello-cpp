@@ -3,23 +3,42 @@
 
 #include "othello/board.hpp"
 
-
-
 using namespace std;
+
+int playNoGui();
+void showHelp();
 
 
 int main(int argc, char *argv[]) {
+    // reading command line arguments
+    bool gui = false;
+    for(int i = 1 ; i < argc ; i++) {
+        string stringed = (string) argv[i];
+        if(stringed == "--gui") {
+            gui = true;
+            continue;
+        }
+        if(stringed == "--no-gui") {
+            gui = false;
+            continue;
+        }
+        if(stringed == "-h" || stringed == "--help") {
+            showHelp();
+            return 0;
+        }
+        cout << "argument \"" << stringed << "\" is not recognised." << endl;
+        return 1;
+    }
+    if(gui) {
+        cout << "GUI : Work in progress. please play in no-gui mode." << endl;
+    } else {
+        return playNoGui();
+    }
+}
+
+int playNoGui() {
     othello::Board a;
-
-    a.setCase("d4",othello::pawn::white);
-    a.setCase("e5",othello::pawn::white);
-    a.setCase("e4",othello::pawn::black);
-    a.setCase("d5",othello::pawn::black);
-    /*
-        a.setCase("c6",othello::pawn::white);
-        a.setCase("f3",othello::pawn::white);
-    */
-
+    a.newGame();
     string play = "";
     othello::pawn players[2] = {othello::pawn::black,othello::pawn::white};
     chrono::_V2::system_clock::time_point t1,t2;
@@ -30,6 +49,7 @@ int main(int argc, char *argv[]) {
     while(true){
         
         cout << "------------------" << endl << a.prettyPlay(players[player_index]) << "------------------" << endl;
+
         a.getPawnNumbers(score);
         cout << "vide : " << score[othello::pawn::empty] << "\tnoir : " << score[othello::pawn::black] << "\tblanc : " << score[othello::pawn::white] << endl;
 
@@ -78,5 +98,24 @@ int main(int argc, char *argv[]) {
         player_index = (player_index + 1)%2;
     }
 
+    a.getPawnNumbers(score);
+
+    if(score[othello::pawn::black] < score[othello::pawn::white]) {
+        cout << "Victoire des blancs." << endl;
+    } else if(score[othello::pawn::black] > score[othello::pawn::white]) {
+         cout << "Victoire des noirs." << endl;
+    } else {
+        cout << "Match nul." << endl;
+    }
+
     return 0;
+}
+
+void showHelp() {
+    cout << " ohtello by 0xf7ed0 & kappacino " << endl;
+    cout << "---------------------------------" << endl << endl;
+    cout << "usage : othello [--gui | --no-gui]" << endl << endl;
+    cout << "---------------------------------" << endl << endl;
+    cout << "--gui      enable the GUI to play" << endl;
+    cout << "--no-gui   play in CLI (default) " << endl;
 }
