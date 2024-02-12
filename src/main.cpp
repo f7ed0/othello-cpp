@@ -2,11 +2,13 @@
 #include <chrono>
 
 #include "othello/board.hpp"
+#include "gui/window.hpp"
 
 using namespace std;
 
 int playNoGui();
 void showHelp();
+int playGUI();
 
 
 int main(int argc, char *argv[]) {
@@ -30,10 +32,22 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     if(gui) {
-        cout << "GUI : Work in progress. please play in no-gui mode." << endl;
+        return playGUI();
     } else {
         return playNoGui();
     }
+}
+
+int playGUI() {
+    gui::Window::SDLInit();
+
+    gui::Window *w = new gui::Window();
+
+    w->mainLoop();
+
+    gui::Window::SDLQuit();
+
+    return 0;
 }
 
 int playNoGui() {
@@ -81,7 +95,7 @@ int playNoGui() {
 
         timing = chrono::duration_cast<chrono::microseconds>(t2-t1);
 
-        cout << "Plays fetched in " << ((float) timing.count())/1000 << "µs." << endl;
+        cout << "Plays fetched in " << ((float) timing.count())/1000.0f << "µs." << endl;
 
         if(players[player_index] == othello::pawn::black) {
             cout << "Joueur : Noir #" << endl;
