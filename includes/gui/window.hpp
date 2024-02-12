@@ -3,7 +3,10 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <thread>
+#include <atomic>
 #include "othello/board.hpp"
+#include "ia/interface.hpp"
 
 namespace gui {
 
@@ -32,17 +35,33 @@ namespace gui {
             int mousePosX;
             int mousePosY;
 
-            bool currently_resizing;
-
             int* score;
 
             static constexpr float aspectRatio = 16.0f/9.0f;
+
+            bool isPlayer1AI;
+            bool isPlayer2AI;
+
+            IA::IAInterface* IA1;
+            IA::IAInterface* IA2;
+
+            std::atomic<bool> IA_thinking;
+            std::atomic<int> IA_result;
+
+            bool IA_launched;
+
+            std::thread* IAthread;
+
 
         protected :
             int eventPolling();
             void rendering();
 
+            static void IAPlay(IA::IAInterface* ia,const othello::Board& board, othello::pawn team, std::atomic<bool>* thinking, std::atomic<int>* result);
+
             void placePawn(int posX, int posY);
+
+            void placePawn(int index);
 
             // Graphical Board boundaries
             int minDimention() const;
@@ -73,6 +92,7 @@ namespace gui {
             static void SDLQuit();
 
             Window();
+            Window(bool player1IA, bool player2IA, std::string IA1, std::string IA2);
             ~Window();
 
             int mainLoop();

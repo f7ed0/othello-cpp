@@ -8,12 +8,17 @@ using namespace std;
 
 int playNoGui();
 void showHelp();
-int playGUI();
+int playGUI(bool IA1, bool IA2, string name1, string name2);
 
 
 int main(int argc, char *argv[]) {
     // reading command line arguments
     bool gui = false;
+
+    bool IA1 = false;
+    bool IA2 = false;
+    string IA1_name = "";
+    string IA2_name = "";
     for(int i = 1 ; i < argc ; i++) {
         string stringed = (string) argv[i];
         if(stringed == "--gui") {
@@ -28,20 +33,32 @@ int main(int argc, char *argv[]) {
             showHelp();
             return 0;
         }
+        if(stringed == "--IA1") {
+            IA1 = true;
+            i++;
+            IA1_name = (string) argv[i];
+            continue;
+        }
+        if(stringed == "--IA2") {
+            IA2 = true;
+            i++;
+            IA2_name = (string) argv[i];
+            continue;
+        }
         cout << "argument \"" << stringed << "\" is not recognised." << endl;
         return 1;
     }
     if(gui) {
-        return playGUI();
+        return playGUI(IA1,IA2,IA1_name,IA2_name);
     } else {
         return playNoGui();
     }
 }
 
-int playGUI() {
+int playGUI(bool IA1, bool IA2, string name1, string name2) {
     gui::Window::SDLInit();
 
-    gui::Window *w = new gui::Window();
+    gui::Window *w = new gui::Window(IA1,IA2,name1,name2);
 
     w->mainLoop();
 

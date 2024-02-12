@@ -20,14 +20,6 @@ void Window::rendering() {
 
     SDL_FRect r;
 
-    /* 
-    SDL_SetRenderDrawColor(this->r,0,0,0,255);
-    if(current_player == othello::pawn::black) {
-        r = {0,0,50,50};
-        SDL_RenderFillRectF(this->r, &r);
-    }
-    */
-
     // Rendering wood back box
     r = {minx-sep*.3f,miny-sep*.3f,dim+sep*.6f,dim+sep*.6f};
     SDL_RenderCopyF(this->r,this->textures[Window::WOOD_BOARD_TEXTURE],NULL,&r);
@@ -83,6 +75,8 @@ void Window::rendering() {
         SDL_RenderFillRectF(this->r, &r);
     }
 
+    // ---------------- TEXT ------------------------
+
     std::stringstream ss;
 
     ss << this->score[othello::pawn::black] << " - " << this->score[othello::pawn::white];
@@ -93,7 +87,7 @@ void Window::rendering() {
 
 
     //Rendering score
-    SDL_Surface* textsurf = TTF_RenderText_Blended_Wrapped(this->font,ss.str().c_str(),front,100);
+    SDL_Surface* textsurf = TTF_RenderText_Blended_Wrapped(this->font,ss.str().c_str(),front,this->minDimention()/5);
     if(textsurf == NULL) {
         std::cout << SDL_GetError() << std::endl;
         throw SDL_GetError();
@@ -106,9 +100,17 @@ void Window::rendering() {
 
     SDL_FreeSurface(textsurf);
 
-    r = {0,0,100,100};
+    r = {minx-((float) (this->minDimention()/5))*2,((float) this->height)/2 - ((float) (this->minDimention()/5))*0.25f,(float) (this->minDimention()/5),(float) (this->minDimention()/5)*0.5f};
 
     SDL_RenderCopyF(this->r,textTexture,NULL,&r);
+
+    r = {minx-((float) (this->minDimention()/5))*2-sep*0.7f-10,((float) this->height)/2 - sep*0.35f,sep*0.7f,sep*0.7f};
+    SDL_RenderCopyF(this->r,this->textures[BLACK_PAWN_TEXTURE],NULL,&r);
+
+    r = {minx-((float) (this->minDimention()/5))+10,((float) this->height)/2 - sep*0.35f,sep*0.7f,sep*0.7f};
+    SDL_RenderCopyF(this->r,this->textures[WHITE_PAWN_TEXTURE],NULL,&r);
+
+    // ----------------------------------------------
 
     SDL_RenderPresent(this->r);
 }
