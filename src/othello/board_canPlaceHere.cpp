@@ -1,4 +1,5 @@
 #include "othello/board.hpp"
+#include "errors/errors.hpp"
 
 using namespace othello;
 
@@ -10,7 +11,7 @@ direction Board::canPlaceHere(int index,pawn team) const {
         if(this->getCase(index) != pawn::empty) {
             return NODIR;
         }
-    } catch(int err) {
+    } catch(errors::OutOfBoundError err) {
         return NODIR;
     }
 
