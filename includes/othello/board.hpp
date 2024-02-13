@@ -128,6 +128,8 @@ namespace othello {
              * return an array of 3 int representing the number of empty case, team black and team white case.
             */
             void getPawnNumbers(int arr[3]) const;
+
+            bool isFinished() const;
     };
 
     std::ostream& operator<<(std::ostream& os,const Board& item);

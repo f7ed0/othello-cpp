@@ -125,6 +125,10 @@ void Board::newGame() {
     this->setCase("d5",othello::pawn::black);
 }
 
+bool Board::isFinished() const {
+    return this->listAllPlay(pawn::black).size() == 0 && this->listAllPlay(pawn::white).size() == 0;
+}
+
 // ------------------------------------------------------------------------------------
 
 int Board::coord2Index(const std::string& coordinate) {
@@ -138,16 +142,6 @@ std::string Board::index2Coord(int index) {
     return s;
 }
 
-// ----------------------------------------------------------------------------------
-
-std::ostream& othello::operator<<(std::ostream& os, const Board& item) {
-    os << "[ ";
-    for(int i = 0 ; i < Board::length; i++) {
-        os << item.cases[i] << " ";
-    }
-    return os << "]";
-}
-
 std::vector<int> Board::diff(const Board& a, const Board& b) {
     std::vector<int> ret;
     for(int i = 0; i < Board::length ; i++) {
@@ -156,6 +150,16 @@ std::vector<int> Board::diff(const Board& a, const Board& b) {
         }
     }
     return ret;
+}
+
+// ----------------------------------------------------------------------------------
+
+std::ostream& othello::operator<<(std::ostream& os, const Board& item) {
+    os << "[ ";
+    for(int i = 0 ; i < Board::length; i++) {
+        os << item.cases[i] << " ";
+    }
+    return os << "]";
 }
 
 // ---------------------------------------------------------------------------------------
