@@ -14,13 +14,13 @@ using namespace gui;
 
 Window::Window() {
     if(SDL_CreateWindowAndRenderer(1280,720,SDL_WINDOW_RESIZABLE,&this->w,&this->r) != 0) {
-        throw -1; // TODO make an error type
+        throw errors::SDLError(SDL_GetError());
     }
     if(this->w == NULL) {
-        throw -1;
+        throw errors::SDLError(SDL_GetError());
     }
     if(this->r == NULL) {
-        throw -1;
+        throw errors::SDLError(SDL_GetError());
     }
     SDL_SetWindowTitle(this->w,"Othello SDL2");
     SDL_SetWindowMinimumSize(this->w, 640, 480);
@@ -99,20 +99,14 @@ Window::~Window() {
 
 void Window::SDLInit() {
     if(SDL_Init(0) != 0) {
-        throw -1; // TODO make an error type
+        throw errors::SDLError(SDL_GetError());
     }
 
     if(TTF_Init() != 0){
-        throw -1;
+        throw TTF_GetError();
     } 
 
     srand(time(NULL));
-    /*
-    bool value = SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "2" );
-    if(!value) {
-        std::cout << "Failed setting the anti-alisasing" << std::endl;
-    }
-    */
 }
 
 void Window::SDLQuit() {

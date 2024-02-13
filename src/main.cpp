@@ -143,10 +143,12 @@ int playNoGui() {
 }
 
 void showHelp() {
-    cout << " ohtello by 0xf7ed0 & kappacino " << endl;
-    cout << "---------------------------------" << endl << endl;
-    cout << "usage : othello [--gui | --no-gui]" << endl << endl;
-    cout << "---------------------------------" << endl << endl;
-    cout << "--gui      enable the GUI to play" << endl;
-    cout << "--no-gui   play in CLI (default) " << endl;
+    cout << "      ohtello by 0xf7ed0 & kappacino      " << endl;
+    cout << "--------------------------------------------------------------" << endl << endl;
+    cout << " usage : othello [--gui | --no-gui] [--IA1 name] [--IA2 name] " << endl << endl;
+    cout << "--------------------------------------------------------------" << endl << endl;
+    cout << "  --gui           enable the GUI to play" << endl;
+    cout << "  --no-gui        play in CLI (default) " << endl;
+    cout << "  --IA1 name      set player1 (black) to AI " << endl;
+    cout << "  --IA2 name      set player2 (white) to AI " << endl;
 }

@@ -1,6 +1,7 @@
 #include "othello/board.hpp"
 #include <cstdlib>
 #include <sstream>
+#include "errors/errors.hpp"
 
 using namespace othello;
 
@@ -8,17 +9,15 @@ using namespace othello;
 
 Board::Board() {
     this->cases = (pawn *) calloc(64,sizeof(pawn));
-    // TODO : create proper error type
     if(this->cases == NULL) {
-        throw -1;
+        throw errors::UnAllocatedVariableError();
     }
 }
 
 Board::Board(const Board& original) {
     this->cases = (pawn *) calloc(64,sizeof(pawn));
-    // TODO : create proper error type
     if(this->cases == NULL) {
-        throw -1;
+        throw errors::UnAllocatedVariableError();
     }
     for(int i = 0 ; i < Board::length ; i++){
         this->cases[i] = original.cases[i];
@@ -37,8 +36,7 @@ pawn Board::getCase(int index) const {
     if(index >= 0 && index < 64) {
         return this->cases[index];
     }
-    // TODO : type this
-    throw -1;
+    throw errors::OutOfBoundError();
 }
 
 pawn Board::getCase(const std::string& coordinate) const {
@@ -87,8 +85,9 @@ std::string Board::prettyPlay(pawn team) const {
 void Board::setCase(int index,pawn value) {
     if(index >= 0 && index < 64) {
         this->cases[index] = value;
+        return;
     }
-    // TODO handle error
+    throw errors::OutOfBoundError();
 }
 
 void Board::setCase(const std::string& coordinate, pawn value) {
