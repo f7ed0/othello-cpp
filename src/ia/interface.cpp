@@ -8,9 +8,14 @@ using namespace IA;
 IAInterface* IAInterface::selectByName(std::string name) {
     if(name == "random") {
         return (new Random());
-    } else if(name == "minmax_robin"){
-        return (new MinMax());
+    } else if(name == "minmax_robin3"){
+        return (new MinMax(3));
+    } else if(name == "minmax_robin5"){
+        return (new MinMax(5));
+    } else if(name == "minmax_robin10"){
+        return (new MinMax(10));
     } else {
+        std::cout << "No IA named " << name << "." << std::endl;
         throw errors::OutOfBoundError();
     }
 }

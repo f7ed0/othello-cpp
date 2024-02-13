@@ -129,6 +129,16 @@ bool Board::isFinished() const {
     return this->listAllPlay(pawn::black).size() == 0 && this->listAllPlay(pawn::white).size() == 0;
 }
 
+int Board::filledCount() const {
+    int count = 0;
+    for(int i =0; i < Board::length ; i++) {
+        if(this->getCase(i) != pawn::empty){
+            count ++;
+        }
+    }
+    return count;
+}
+
 // ------------------------------------------------------------------------------------
 
 int Board::coord2Index(const std::string& coordinate) {

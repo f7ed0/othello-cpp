@@ -130,6 +130,8 @@ namespace othello {
             void getPawnNumbers(int arr[3]) const;
 
             bool isFinished() const;
+
+            int filledCount() const;
     };
 
     std::ostream& operator<<(std::ostream& os,const Board& item);

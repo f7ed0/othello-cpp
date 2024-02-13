@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount);
+int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount, bool progress);
 void showHelp();
 int playGUI(bool IA1, bool IA2, string name1, string name2);
 
@@ -17,6 +17,9 @@ int main(int argc, char *argv[]) {
 
     bool IA1 = false;
     bool IA2 = false;
+
+    bool progress = false;
+
     string IA1_name = "";
     string IA2_name = "";
 
@@ -58,13 +61,17 @@ int main(int argc, char *argv[]) {
             }
             continue;
         }
+        if(stringed == "--progress") {
+            progress = true;
+            continue;
+        }
         cout << "argument \"" << stringed << "\" is not recognised." << endl;
         return 1;
     }
     if(gui) {
         return playGUI(IA1,IA2,IA1_name,IA2_name);
     } else {
-        return playNoGui(IA1,IA2,IA1_name,IA2_name,gcount);
+        return playNoGui(IA1,IA2,IA1_name,IA2_name,gcount,progress);
     }
 }
 
@@ -80,7 +87,7 @@ int playGUI(bool IA1, bool IA2, string name1, string name2) {
     return 0;
 }
 
-int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount) {
+int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool progress) {
     IA::IAInterface* IA_black = NULL;
     IA::IAInterface* IA_white = NULL;
     if(IA1) {
@@ -102,6 +109,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount) {
     long move_count2 = 0;
 
     for(int i =0 ; i < gamecount ; i++) {
+        cout << "game " << i+1 << " of " << gamecount << endl;
         othello::Board a;
         a.newGame();
         othello::pawn players[2] = {othello::pawn::black,othello::pawn::white};
@@ -147,6 +155,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount) {
                 mean_time_move1 += (double) chrono::duration_cast<chrono::microseconds>(t2-t1).count();
                 move_count1 ++;
                 if(a.placePawn(move,players[player_index]) == 0) {
+                    cout << "can't place here" << endl;
                     throw 1;
                 }
             } else if((players[player_index] == othello::pawn::white) && IA2) {
@@ -156,6 +165,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount) {
                 mean_time_move2 += (double) chrono::duration_cast<chrono::microseconds>(t2-t1).count();
                 move_count2 ++;
                 if(a.placePawn(move,players[player_index]) == 0) {
+                    cout << "can't place here" << endl;
                     throw 1;
                 }
             } else {
@@ -163,6 +173,10 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount) {
                     cin >> play;
                 }
                 cout << a.placePawn(othello::Board::coord2Index(play),players[player_index]) << " pawns taken."  << endl;
+            }
+
+            if(IA1 && IA2 && progress) {
+                cout << a.filledCount() << "/" << othello::Board::length << endl;
             }
             
             player_index = (player_index + 1)%2;

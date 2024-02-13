@@ -5,6 +5,8 @@
 
 namespace IA {
     class Random : public IAInterface {
+        protected :
+            int euristics(const othello::Board& current_board, const othello::pawn team) override;
         public :
             int makeAMove(const othello::Board& current_board,othello::pawn team) override;
 

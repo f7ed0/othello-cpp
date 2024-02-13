@@ -15,3 +15,7 @@ int Random::makeAMove(const othello::Board& current_board, othello::pawn team) {
 void Random::resetAI() {
     return;
 }
+
+int Random::euristics(const othello::Board& current_board, const othello::pawn team) {
+    return 0;
+}

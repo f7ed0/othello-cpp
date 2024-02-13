@@ -8,6 +8,8 @@ namespace IA {
      * Virtual class for creating AI for the othello game.
     */
     class IAInterface {
+        protected :
+            virtual int euristics(const othello::Board& current_board, const othello::pawn team) = 0;
         public :
 
             static const int payoff_matrix[64]; 
