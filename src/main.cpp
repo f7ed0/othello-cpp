@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int playNoGui();
+int playNoGui(bool IA1, bool IA2, string name1, string name2);
 void showHelp();
 int playGUI(bool IA1, bool IA2, string name1, string name2);
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     if(gui) {
         return playGUI(IA1,IA2,IA1_name,IA2_name);
     } else {
-        return playNoGui();
+        return playNoGui(IA1,IA2,IA1_name,IA2_name);
     }
 }
 
@@ -67,7 +67,18 @@ int playGUI(bool IA1, bool IA2, string name1, string name2) {
     return 0;
 }
 
-int playNoGui() {
+int playNoGui(bool IA1, bool IA2, string name1, string name2) {
+    IA::IAInterface* IA_black = NULL;
+    IA::IAInterface* IA_white = NULL;
+    if(IA1) {
+        IA_black = IA::IAInterface::selectByName(name1);
+    }
+    if(IA2) {
+        IA_white = IA::IAInterface::selectByName(name2);
+    }
+
+    srand(time(NULL));
+
     othello::Board a;
     a.newGame();
     string play = "";
@@ -111,7 +122,7 @@ int playNoGui() {
         cout << endl;
 
         timing = chrono::duration_cast<chrono::microseconds>(t2-t1);
-
+            ;
         cout << "Plays fetched in " << ((float) timing.count())/1000.0f << "µs." << endl;
 
         if(players[player_index] == othello::pawn::black) {
@@ -120,8 +131,22 @@ int playNoGui() {
             cout << "Joueur : Blanc O" << endl;
         }
 
-        while(!a.canPlaceHere(othello::Board::coord2Index(play),players[player_index])) {
-            cin >> play;
+        if((players[player_index] == othello::pawn::black) && IA1) {
+            int move = IA_black->makeAMove(a,othello::black);
+            cout << othello::Board::index2Coord(move) << endl;
+            if(a.placePawn(move,players[player_index]) == 0) {
+                throw 1;
+            }
+        } else if((players[player_index] == othello::pawn::white) && IA2) {
+            int move = IA_white->makeAMove(a,othello::white);
+            cout << othello::Board::index2Coord(move) << endl;
+            if(a.placePawn(move,players[player_index]) == 0) {
+                throw 1;
+            }
+        } else {
+            while(!a.canPlaceHere(othello::Board::coord2Index(play),players[player_index])) {
+                cin >> play;
+            }
         }
         
         cout << a.placePawn(othello::Board::coord2Index(play),players[player_index]) << " pawns taken."  << endl;
