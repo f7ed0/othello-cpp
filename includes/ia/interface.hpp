@@ -17,6 +17,8 @@ namespace IA {
             virtual void resetAI() {};
 
             static IAInterface* selectByName(std::string name);
+
+            static othello::pawn switchTeam(othello::pawn p);
     };
 }
 
