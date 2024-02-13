@@ -9,6 +9,9 @@ namespace IA {
     */
     class IAInterface {
         public :
+
+            static const int payoff_matrix[64]; 
+            
             virtual int makeAMove(const othello::Board& current_board,othello::pawn team) = 0;
 
             virtual void resetAI() {};
