@@ -9,6 +9,9 @@ namespace IA {
             int depth;
         protected :
             int euristics(const othello::Board& current_board, const othello::pawn team) override;
+
+            static void launchMinmax(MinMax* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result);
+            
         public :
             int makeAMove(const othello::Board& current_board,othello::pawn team) override;
 
@@ -17,8 +20,6 @@ namespace IA {
             void resetAI() override;
 
             MinMax(int __depth);
-
-            static void launchMinmax(MinMax* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result);
 
     };
 }

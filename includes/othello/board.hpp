@@ -131,6 +131,9 @@ namespace othello {
 
             bool isFinished() const;
 
+            /**
+             * Realy unoptimised : do not use if you already called listAllPlay for one of the player.
+            */
             int filledCount() const;
     };
 
