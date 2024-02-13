@@ -148,6 +148,16 @@ std::ostream& othello::operator<<(std::ostream& os, const Board& item) {
     return os << "]";
 }
 
+std::vector<int> Board::diff(const Board& a, const Board& b) {
+    std::vector<int> ret;
+    for(int i = 0; i < Board::length ; i++) {
+        if(a.getCase(i) != b.getCase(i)) {
+            ret.push_back(i);
+        }
+    }
+    return ret;
+}
+
 // ---------------------------------------------------------------------------------------
 
 int max(int a, int b) {

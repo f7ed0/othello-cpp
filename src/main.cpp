@@ -194,7 +194,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount) {
     cout << winloss[othello::pawn::empty] << " match(s) nul(s)." << endl;
 
     if(move_count1 > 0) {
-        cout << "IA1 (" + name1 + ") mean calculation time per move : " << (mean_time_move1 / (((double) move_count1)*1000)) << " ms (" << move_count2 << " moves played)" << endl;
+        cout << "IA1 (" + name1 + ") mean calculation time per move : " << (mean_time_move1 / (((double) move_count1)*1000)) << " ms (" << move_count1 << " moves played)" << endl;
     }
 
     if(move_count2 > 0) {

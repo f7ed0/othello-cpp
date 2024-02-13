@@ -42,6 +42,8 @@ namespace othello {
             // Number of cases of the board
             const static int length = 64;
 
+            static std::vector<int> diff(const Board& a, const Board& b);
+
             /**
              * convert coordinate into index of the array representation
              * UNSAFE : does not check if the coordinate is in the board or not.
