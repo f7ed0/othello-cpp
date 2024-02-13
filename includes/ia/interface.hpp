@@ -12,6 +12,8 @@ namespace IA {
             virtual int makeAMove(const othello::Board& current_board,othello::pawn team) = 0;
 
             virtual void resetAI() {};
+
+            static IAInterface* selectByName(std::string name);
     };
 }
 

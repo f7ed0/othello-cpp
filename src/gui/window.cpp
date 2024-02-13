@@ -71,19 +71,11 @@ Window::Window(bool player1IA, bool player2IA, std::string IA1, std::string IA2)
     this->isPlayer2AI = player2IA;
 
     if(this->isPlayer1AI) {
-        if(IA1 == "random") {
-            this->IA1 = new IA::Random();
-        } else {
-            throw -1;
-        }
+        this->IA1 = IA::IAInterface::selectByName(IA1);
     }
 
     if(this->isPlayer2AI) {
-        if(IA2 == "random") {
-            this->IA2 = new IA::Random();
-        } else {
-            throw -1;
-        }
+        this->IA2 = IA::IAInterface::selectByName(IA2);
     }
 }
 
@@ -125,13 +117,13 @@ int Window::mainLoop() {
 
         if(!gameEnded && ((current_player == othello::pawn::black && isPlayer1AI) || (current_player == othello::pawn::white && isPlayer2AI))) {
             if(!IA_launched) {
+                IA_thinking = true;
+                IA_launched = true;
                 if(this->current_player == othello::pawn::black){
                     this->IAthread = new std::thread(Window::IAPlay,this->IA1,*(this->board),this->current_player,&IA_thinking,&IA_result);
                 } else {
                     this->IAthread = new std::thread(Window::IAPlay,this->IA2,*(this->board),this->current_player,&IA_thinking,&IA_result);
                 }
-                IA_thinking = true;
-                IA_launched = true;
             } else {
                 if(!IA_thinking) {
                     if(this->IAthread->joinable()) {
