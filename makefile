@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -Wall
-LIB =
+LIB = -lSDL2 -lSDL2main -lSDL2_image -lSDL2_ttf
 SDIR = src
 HDIR = includes
 BUILDDIR = bin
@@ -29,7 +29,7 @@ $(BINARY): $(OBJECTS) $(CUSTOMLIBS)/%.o
 
 $(BUILDDIR)/%.o: $(SDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(LIB) -I$(HDIR) $(INCLUDELIB) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(HDIR) $(INCLUDELIB) -c $< -o $@
 
 $(CUSTOMLIBS)/%.o:
 	$(foreach lib, $(CUSTOMLIBS),  (cd $(lib) && make))

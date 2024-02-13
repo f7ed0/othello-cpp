@@ -2,16 +2,23 @@
 #include <chrono>
 
 #include "othello/board.hpp"
+#include "gui/window.hpp"
 
 using namespace std;
 
 int playNoGui();
 void showHelp();
+int playGUI(bool IA1, bool IA2, string name1, string name2);
 
 
 int main(int argc, char *argv[]) {
     // reading command line arguments
     bool gui = false;
+
+    bool IA1 = false;
+    bool IA2 = false;
+    string IA1_name = "";
+    string IA2_name = "";
     for(int i = 1 ; i < argc ; i++) {
         string stringed = (string) argv[i];
         if(stringed == "--gui") {
@@ -26,14 +33,38 @@ int main(int argc, char *argv[]) {
             showHelp();
             return 0;
         }
+        if(stringed == "--IA1") {
+            IA1 = true;
+            i++;
+            IA1_name = (string) argv[i];
+            continue;
+        }
+        if(stringed == "--IA2") {
+            IA2 = true;
+            i++;
+            IA2_name = (string) argv[i];
+            continue;
+        }
         cout << "argument \"" << stringed << "\" is not recognised." << endl;
         return 1;
     }
     if(gui) {
-        cout << "GUI : Work in progress. please play in no-gui mode." << endl;
+        return playGUI(IA1,IA2,IA1_name,IA2_name);
     } else {
         return playNoGui();
     }
+}
+
+int playGUI(bool IA1, bool IA2, string name1, string name2) {
+    gui::Window::SDLInit();
+
+    gui::Window *w = new gui::Window(IA1,IA2,name1,name2);
+
+    w->mainLoop();
+
+    gui::Window::SDLQuit();
+
+    return 0;
 }
 
 int playNoGui() {
@@ -81,7 +112,7 @@ int playNoGui() {
 
         timing = chrono::duration_cast<chrono::microseconds>(t2-t1);
 
-        cout << "Plays fetched in " << ((float) timing.count())/1000 << "µs." << endl;
+        cout << "Plays fetched in " << ((float) timing.count())/1000.0f << "µs." << endl;
 
         if(players[player_index] == othello::pawn::black) {
             cout << "Joueur : Noir #" << endl;
@@ -112,10 +143,12 @@ int playNoGui() {
 }
 
 void showHelp() {
-    cout << " ohtello by 0xf7ed0 & kappacino " << endl;
-    cout << "---------------------------------" << endl << endl;
-    cout << "usage : othello [--gui | --no-gui]" << endl << endl;
-    cout << "---------------------------------" << endl << endl;
-    cout << "--gui      enable the GUI to play" << endl;
-    cout << "--no-gui   play in CLI (default) " << endl;
+    cout << "      ohtello by 0xf7ed0 & kappacino      " << endl;
+    cout << "--------------------------------------------------------------" << endl << endl;
+    cout << " usage : othello [--gui | --no-gui] [--IA1 name] [--IA2 name] " << endl << endl;
+    cout << "--------------------------------------------------------------" << endl << endl;
+    cout << "  --gui           enable the GUI to play" << endl;
+    cout << "  --no-gui        play in CLI (default) " << endl;
+    cout << "  --IA1 name      set player1 (black) to AI " << endl;
+    cout << "  --IA2 name      set player2 (white) to AI " << endl;
 }
