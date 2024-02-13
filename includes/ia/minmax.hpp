@@ -17,6 +17,9 @@ namespace IA {
             void resetAI() override;
 
             MinMax(int __depth);
+
+            static void launchMinmax(MinMax* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result);
+
     };
 }
 

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount, bool progress);
+int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount, bool progress, bool noresult);
 void showHelp();
 int playGUI(bool IA1, bool IA2, string name1, string name2);
 
@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
     bool IA2 = false;
 
     bool progress = false;
+
+    bool no_result = false;
 
     string IA1_name = "";
     string IA2_name = "";
@@ -65,13 +67,17 @@ int main(int argc, char *argv[]) {
             progress = true;
             continue;
         }
+        if(stringed == "--no-result") {
+            no_result = true;
+            continue;
+        }
         cout << "argument \"" << stringed << "\" is not recognised." << endl;
         return 1;
     }
     if(gui) {
         return playGUI(IA1,IA2,IA1_name,IA2_name);
     } else {
-        return playNoGui(IA1,IA2,IA1_name,IA2_name,gcount,progress);
+        return playNoGui(IA1,IA2,IA1_name,IA2_name,gcount,progress,no_result);
     }
 }
 
@@ -87,7 +93,7 @@ int playGUI(bool IA1, bool IA2, string name1, string name2) {
     return 0;
 }
 
-int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool progress) {
+int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool progress, bool no_result) {
     IA::IAInterface* IA_black = NULL;
     IA::IAInterface* IA_white = NULL;
     if(IA1) {
@@ -176,7 +182,8 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
             }
 
             if(IA1 && IA2 && progress) {
-                cout << a.filledCount() << "/" << othello::Board::length << endl;
+                cout << ".";
+                cout.flush();
             }
             
             player_index = (player_index + 1)%2;
@@ -184,7 +191,13 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
 
         a.getPawnNumbers(score);
 
-        cout << "------------------" << endl << a.prettyPlay(players[player_index]) << "------------------" << endl;
+        if(IA1 && IA2 && progress) {
+            cout << endl;
+        }
+
+        if(!no_result) {
+            cout << "------------------" << endl << a.prettyPlay(players[player_index]) << "------------------" << endl;
+        }
 
         a.getPawnNumbers(score);
         cout << "vide : " << score[othello::pawn::empty] << "\tnoir : " << score[othello::pawn::black] << "\tblanc : " << score[othello::pawn::white] << endl;
