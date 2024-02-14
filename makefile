@@ -2,8 +2,8 @@ CC = g++
 CFLAGS = -Wall
 LIB = -lSDL2 -lSDL2main -lSDL2_image -lSDL2_ttf -lpthread
 SDIR = src
-HDIR = includes
-BUILDDIR = bin
+HDIR = include
+BUILDDIR = lib
 BINARY = game
 CUSTOMLIBDIR = lib
 
@@ -16,20 +16,17 @@ SOURCES := $(foreach dir, $(wildcard $(SDIR)/*),$(wildcard $(dir)/*.cpp)) $(wild
 # listing all .o file from all .cpp file from SDIR
 OBJECTS := $(patsubst $(SDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
-CUSTOMLIBS := $(wildcard $(CUSTOMLIBDIR)/*)
-
-INCLUDELIB := $(foreach lib, $(CUSTOMLIBS), -I$(lib)/$(HDIR))
 
 # ==========================================================================
 
 all: $(BINARY) 
 
 $(BINARY): $(OBJECTS) $(CUSTOMLIBS)/%.o
-	$(CC) -std=c++0x $(CFLAGS) $(OBJECTS) $(foreach lib, $(CUSTOMLIBS), $(wildcard $(lib)/*.o)) -o $@ $(LIB)
+	$(CC) -std=c++0x $(CFLAGS) $(OBJECTS) -L$(CUSTOMLIBDIR) -o $@ $(LIB)
 
 $(BUILDDIR)/%.o: $(SDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(HDIR) $(INCLUDELIB) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(HDIR) -c $< -o $@
 
 $(CUSTOMLIBS)/%.o:
 	$(foreach lib, $(CUSTOMLIBS),  (cd $(lib) && make))
