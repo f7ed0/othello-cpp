@@ -86,6 +86,8 @@ Window::~Window() {
 
     TTF_CloseFont(this->font);
 
+    delete this->board;
+
     free(this->score);
 }
 
@@ -128,6 +130,7 @@ int Window::mainLoop() {
                 if(!IA_thinking) {
                     if(this->IAthread->joinable()) {
                         this->IAthread->join();
+                        delete this->IAthread;
                     }
                     IA_launched = false;
                     this->placePawn(IA_result);

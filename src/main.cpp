@@ -90,6 +90,8 @@ int playGUI(bool IA1, bool IA2, string name1, string name2) {
 
     gui::Window::SDLQuit();
 
+    delete w;
+
     return 0;
 }
 
@@ -212,6 +214,13 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
         } else {
             cout << "Match nul." << endl;
             winloss[othello::pawn::empty] ++;
+        }
+
+        if(IA1) {
+            IA_black->resetAI();
+        }
+        if(IA2) {
+            IA_white->resetAI();
         }
     }
 

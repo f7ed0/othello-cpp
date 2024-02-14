@@ -97,7 +97,7 @@ void MinMax::resetAI() {
 
 int MinMax::euristics(const othello::Board& current_board, const othello::pawn team) {
     int result = 0;
-    for(int i=0;i < othello::Board::length ; i++) {
+    for(int i=0 ; i < othello::Board::length ; i++) {
         if(current_board.getCase(i) == team) {
             result += MinMax::payoff_matrix[i];
         } else {
