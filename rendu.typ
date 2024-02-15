@@ -1,13 +1,3 @@
-#set heading(numbering:  "I.A.1.a.", supplement: [Partie])
-
-#show heading: it => {
-    if (it.level > 4){
-        block(it.body)
-    } else {
-        block(counter(heading).display() + " " + it.body)
-    }
-}
-
 Compte rendu de Traveaux Pratiques - Fondement de l'IA
 
 SAUSSE Sylvain - LAFONTAINE Robin | 4A ICy
@@ -21,6 +11,16 @@ SAUSSE Sylvain - LAFONTAINE Robin | 4A ICy
 )
 
 #pagebreak(weak: true)
+
+#set heading(numbering:  "I.A.1.a.", supplement: [Partie])
+
+#show heading: it => {
+    if (it.level > 4){
+        block(it.body)
+    } else {
+        block(counter(heading).display() + " " + it.body)
+    }
+}
 
 = Développement du cadre de travail
 
@@ -87,7 +87,10 @@ Les methodes d'interactions sont les methodes publiques de la classe `othello::B
 Deux système de coordonées sont utilisable pour intéragir avec le plateau :
 
 + L'index dans la stucture de donnée, avec lesquel on peut facilement retrouver les valeur lignes - colonnes :
-  $"index" = "colonnes" + ("lignes" times 8) <==> "lignes" equiv "index" [8]  and "colonnes" = "index" div 8$
+  $"index" = "colonnes" + ("lignes" times 8) <==> ( "lignes" equiv "index" [8]  and "colonnes" = "index" div 8 )$ \
+  cette notation correspondant à l'index de la case dans le tableau de pion, elle est rapide mais difficile à comprendre pour une personne.
+  
++ Les coordonées plus classiques composée d'une lettre et d'un chiffre (ex. "d7")
 
 ===== Verifier si un coup est valide
 
