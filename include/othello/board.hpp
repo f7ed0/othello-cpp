@@ -36,6 +36,19 @@ namespace othello {
             // 64 unsigned short allocated array : contains the state of the board
             pawn *cases;
         
+        protected :
+            /**
+             * Setter for case by array index
+            */
+            void setCase(int index,pawn value);
+
+            /**
+             * Setter for case by coordinate
+             * 
+             * uses : int setCase(int index, pawn value);
+            */
+            void setCase(const std::string& coordinate,pawn value);
+        
         public :
             // Size of a row or column of the board
             const static int side = 8;
@@ -87,18 +100,6 @@ namespace othello {
              * uses : int getCase(int index) const;
             */
             pawn getCase(const std::string& coordinate) const;
-
-            /**
-             * Setter for case by array index
-            */
-            void setCase(int index,pawn value);
-
-            /**
-             * Setter for case by coordinate
-             * 
-             * uses : int setCase(int index, pawn value);
-            */
-            void setCase(const std::string& coordinate,pawn value);
 
             /**
              * Check for a case if you can place a token
