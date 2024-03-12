@@ -124,6 +124,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
         int player_index = 0;
         bool end_flag[2] = {0,0};
         int score[3];
+        int count = 1;
         while(true){
             vector<int> plays = a.listAllPlay(players[player_index]);
             string play = "";
@@ -184,11 +185,16 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
             }
 
             if(IA1 && IA2 && progress) {
-                cout << ".";
+                if(count%8==0) {
+                    cout << count;
+                } else {
+                    cout << ".";
+                }
                 cout.flush();
             }
             
             player_index = (player_index + 1)%2;
+            count ++;
         }
 
         a.getPawnNumbers(score);

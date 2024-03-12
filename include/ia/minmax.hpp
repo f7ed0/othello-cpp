@@ -5,10 +5,10 @@
 
 namespace IA {
     class MinMax : public IAInterface {
-        private :
-            int depth;
         protected :
-            int euristics(const othello::Board& current_board, const othello::pawn team) override;
+            int depth;
+
+            int heuristics(const othello::Board& current_board, const othello::pawn team) override;
 
             static void launchMinmax(MinMax* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result);
             

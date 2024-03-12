@@ -104,6 +104,8 @@ void Window::rendering() {
 
     SDL_RenderCopyF(this->r,textTexture,NULL,&r);
 
+    SDL_DestroyTexture(textTexture);
+
     r = {minx-((float) (this->minDimention()/5))*2-sep*0.7f-10,((float) this->height)/2 - sep*0.35f,sep*0.7f,sep*0.7f};
     SDL_RenderCopyF(this->r,this->textures[BLACK_PAWN_TEXTURE],NULL,&r);
 

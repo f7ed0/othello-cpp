@@ -4,13 +4,13 @@
 #include <algorithm>
 #include <thread>
 #include <atomic>
-#include "ia/minmax.hpp"
+#include "ia/alphabeta.hpp"
 
 
 using namespace IA;
 
 
-int MinMax::makeAMove(const othello::Board& current_board, othello::pawn team) {
+int AlphaBeta::makeAMove(const othello::Board& current_board, othello::pawn team) {
     std::vector<int> choices = current_board.listAllPlay(team);
     std::thread** threadArray = (std::thread**) malloc(choices.size()*sizeof(std::thread*));
     int index = 0;
@@ -22,7 +22,7 @@ int MinMax::makeAMove(const othello::Board& current_board, othello::pawn team) {
         if(next_move->placePawn(choices.at(i),team) == 0) {
             throw -1;
         }
-        threadArray[i] =  new std::thread(MinMax::launchMinmax,this,*next_move,MinMax::switchTeam(team),this->depth-1,team,val+i);
+        threadArray[i] =  new std::thread(AlphaBeta::launchAlphabeta,this,*next_move,AlphaBeta::switchTeam(team),this->depth-1,team,val+i);
         delete next_move;
     }
     for(int i = 0; i < (int) choices.size() ; i++) {
@@ -37,17 +37,16 @@ int MinMax::makeAMove(const othello::Board& current_board, othello::pawn team) {
     }
     free(threadArray);
     return choices.at(index);
-    
 }
     
 
-int MinMax::minmax(const othello::Board& current_board,othello::pawn player, const int depth, othello::pawn team) {
+int AlphaBeta::alphabeta(const othello::Board& current_board,othello::pawn player, const int depth, othello::pawn team, int _alpha, int _beta) {
     if (depth == 0) {
         return this->heuristics(current_board,team);
     }
     std::vector<int> choices = current_board.listAllPlay(player);
     if(choices.size() == 0) {
-        player = MinMax::switchTeam(player);
+        player = AlphaBeta::switchTeam(player);
         choices = current_board.listAllPlay(player);
 
         if(choices.size() == 0) {
@@ -73,8 +72,14 @@ int MinMax::minmax(const othello::Board& current_board,othello::pawn player, con
             if(next_move->placePawn(choices.at(i),player) == 0) {
                 throw -1;
             }
-            value = std::max(value,this->minmax(*next_move,MinMax::switchTeam(player),depth-1,team));  
-            delete next_move;     
+            value = std::max(value,this->alphabeta(*next_move,AlphaBeta::switchTeam(player),depth-1,team,_alpha,_beta));
+            delete next_move;
+            if(value >= _beta) { // Coupure betamake
+            
+                return value;
+            }
+            _alpha = std::max(_alpha,value);
+                 
         }
     } else {
         value = INT32_MAX;
@@ -83,34 +88,39 @@ int MinMax::minmax(const othello::Board& current_board,othello::pawn player, con
             if(next_move->placePawn(choices.at(i),player) == 0) {
                 throw -1;
             }
-            value = std::min(value,this->minmax(*next_move,MinMax::switchTeam(player),depth-1,team));
+            value = std::min(value,this->alphabeta(*next_move,AlphaBeta::switchTeam(player),depth-1,team,_alpha,_beta));
             delete next_move;
+            if(_alpha >= value) { // Coupure alpha
+                return value;
+            }
+            _beta = std::min(_beta,value);
+            
         }
     }
     return value;
 }
 
 
-void MinMax::resetAI() {
+void AlphaBeta::resetAI() {
     return;
 }
 
-int MinMax::heuristics(const othello::Board& current_board, const othello::pawn team) {
+int AlphaBeta::heuristics(const othello::Board& current_board, const othello::pawn team) {
     int result = 0;
     for(int i=0 ; i < othello::Board::length ; i++) {
         if(current_board.getCase(i) == team) {
-            result += MinMax::payoff_matrix[i];
+            result += AlphaBeta::payoff_matrix[i];
         } else {
-            result -= MinMax::payoff_matrix[i];
+            result -= AlphaBeta::payoff_matrix[i];
         }
     }
     return result;
 }
 
-MinMax::MinMax(int __depth): IAInterface() {
+AlphaBeta::AlphaBeta(int __depth): IAInterface() {
     this->depth = __depth;
 }
 
-void MinMax::launchMinmax(MinMax* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result ) {
-    *result = IA->minmax(board, player, depth, team);
+void AlphaBeta::launchAlphabeta(AlphaBeta* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result ) {
+    *result = IA->alphabeta(board, player, depth, team, INT32_MIN, INT32_MAX);
 }

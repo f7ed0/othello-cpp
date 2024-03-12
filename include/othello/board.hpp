@@ -7,7 +7,7 @@
 namespace othello {
 
     // Type pawn used by board in the othello representation
-    typedef enum : unsigned short {
+    typedef enum : char {
         empty = 0,
         black = 1,
         white = 2,
@@ -33,7 +33,7 @@ namespace othello {
         friend std::ostream& operator<<(std::ostream &os,const Board& item);
 
         private :
-            // 64 unsigned short allocated array : contains the state of the board
+            // 64 char allocated array : contains the state of the board
             pawn *cases;
         
         protected :

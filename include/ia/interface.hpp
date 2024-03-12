@@ -9,7 +9,7 @@ namespace IA {
     */
     class IAInterface {
         protected :
-            virtual int euristics(const othello::Board& current_board, const othello::pawn team) = 0;
+            virtual int heuristics(const othello::Board& current_board, const othello::pawn team) = 0;
         public :
 
             static const int payoff_matrix[64]; 
