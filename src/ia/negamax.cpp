@@ -75,7 +75,7 @@ int NegaMax::negamax(const othello::Board& current_board,othello::pawn player, c
         if(next_move->placePawn(choices.at(i),player) == 0) {
             throw -1;
         }
-        value = std::max(value,-(this->negamax(*next_move,NegaMax::switchTeam(player),depth-1,team)));  
+        value = std::max(value,this->negamax(*next_move,NegaMax::switchTeam(player),depth-1,team));  
         delete next_move;     
     }
     return value;
