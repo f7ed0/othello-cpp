@@ -1,9 +1,15 @@
-Compte rendu de Traveaux Pratiques - Fondement de l'IA
 
-
-#align(center, text("Compte rendu de travaux pratiques", weight: "bold"))
+#align(center + top, text("Compte Rendu de Traveaux Pratiques - Fondement de l'IA"))
+#line(length: 100%)
+\ \ \
+#align(center, text("Compte Rendu - TP Othello", weight: "bold", size: 24pt))
+\
 #figure(image("img/cover_image.png"))
-#align(center + bottom, text("Fondement de l'IA\n R. Mandiau\n dd - MM - YYYY"))
+\ \
+#align(center, text("SAUSSE Sylvain - LAFONTAINE Robin",size: 12pt))
+
+#align(center + bottom, text("Fondement de l'IA\n R. Mandiau\n"+datetime.today().display("[day]-[month]-[year]"), size: 12pt))
+
 
 
 
