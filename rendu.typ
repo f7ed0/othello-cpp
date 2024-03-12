@@ -1,6 +1,11 @@
 Compte rendu de Traveaux Pratiques - Fondement de l'IA
 
-SAUSSE Sylvain - LAFONTAINE Robin | 4A ICy
+
+#align(center, text("Compte rendu de travaux pratiques", weight: "bold"))
+#figure(image("img/cover_image.png"))
+#align(center + bottom, text("Fondement de l'IA\n R. Mandiau\n dd - MM - YYYY"))
+
+
 
 #pagebreak()
 
@@ -8,6 +13,13 @@ SAUSSE Sylvain - LAFONTAINE Robin | 4A ICy
   title: "Sommaire",
   depth: 4,
   indent: true,
+)
+
+#pagebreak()
+
+#outline(
+  title: "Table des figures",
+  target: figure.where(kind: figure)
 )
 
 #pagebreak(weak: true)
@@ -50,7 +62,8 @@ L'enumeration `pawn` est le type de base utilisé dans la représentation du pla
   } pawn;
   ```
   ],
-  supplement: "figure",
+  supplement: "Figure",
+  kind: figure,
   caption : [définition de `othello::pawn`],
 )
 
@@ -70,7 +83,8 @@ La classe `Board` est le coeur même du jeu. Elle contient la représentation du
   }
   ```
   ],
-  supplement: "figure",
+  supplement: "Figure",
+  kind: figure,
   caption : [`othello::Board.cases` : représentation du plateau],
 )
 
@@ -101,6 +115,7 @@ Cette notation correspondant à l'index de la case dans le tableau de pion, elle
 
 == L'affichage et le benchmarking
 
+#pagebreak()
 
 = Developpement des IA
 
@@ -125,17 +140,24 @@ Nous avons donc fait des recherches
     return value
   ```
   ],
-  supplement: "figure",
+  supplement: "Figure",
+  kind: figure,
   caption : [Algorithme MinMax],
 )
 
-#figure(align(start,text("
+#figure(rect[
+```
 313 match(s) gagné par les Noirs.
 648 match(s) gagné par les Blanc.
 39 match(s) nul(s).
 IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
 IA2 (minmax3) mean calculation time per move : 0.856059 ms (29983 moves played)
-")), caption: "Résultats de Random v MinMax sur 1000 parties")
+```
+], 
+  supplement: "Figure",
+  kind: figure,
+  caption: "Résultats de Random v MinMax sur 1000 parties"
+)
 
 == Negamax
 
