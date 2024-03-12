@@ -46,7 +46,7 @@ int NegaMax::negamax(const othello::Board& current_board,othello::pawn player, c
     int color = (player == team) ? 1 : -1;
     
     if (depth == 0) {
-        return color*this->heuristics(current_board,player);
+        return color*this->heuristics(current_board,player,player);
     }
 
     std::vector<int> choices = current_board.listAllPlay(player);
@@ -87,7 +87,7 @@ void NegaMax::resetAI() {
     return;
 }
 
-int NegaMax::heuristics(const othello::Board& current_board, const othello::pawn team) {
+int NegaMax::heuristics(const othello::Board& current_board, const othello::pawn team,const othello::pawn player) {
     int result = 0;
     for(int i=0 ; i < othello::Board::length ; i++) {
         if(current_board.getCase(i) == team) {
