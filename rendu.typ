@@ -87,8 +87,10 @@ Les methodes d'interactions sont les methodes publiques de la classe `othello::B
 Deux système de coordonées sont utilisable pour intéragir avec le plateau :
 
 + L'index dans la stucture de donnée, avec lesquel on peut facilement retrouver les valeur lignes - colonnes :
-  $"index" = "colonnes" + ("lignes" times 8) <==> ( "lignes" equiv "index" [8]  and "colonnes" = "index" div 8 )$ \
-  cette notation correspondant à l'index de la case dans le tableau de pion, elle est rapide mais difficile à comprendre pour une personne.
+#figure(
+  $"index" = "colonnes" + ("lignes" times 8) <==> ( "lignes" equiv "index" [8]  and "colonnes" = "index" div 8 )$
+)
+Cette notation correspondant à l'index de la case dans le tableau de pion, elle est rapide mais difficile à comprendre pour une personne.
   
 + Les coordonées plus classiques composée d'une lettre et d'un chiffre (ex. "d7")
 
@@ -103,3 +105,37 @@ Deux système de coordonées sont utilisable pour intéragir avec le plateau :
 = Developpement des IA
 
 == MinMax
+Avant de procéder au développement de l'IA il était judicieux de bien comprendre l'algorithme de ce dernier.
+Nous avons donc fait des recherches 
+
+#figure(
+  rect[
+  ```py
+  function minimax(node, depth, maximizingPlayer) is
+    if depth = 0 or node is a terminal node then
+        return the heuristic value of node
+    if maximizingPlayer then
+        value := −∞
+        for each child of node do
+            value := max(value, minimax(child, depth − 1, FALSE))
+    else (* minimizing player *)
+        value := +∞
+        for each child of node do
+            value := min(value, minimax(child, depth − 1, TRUE))
+    return value
+  ```
+  ],
+  supplement: "figure",
+  caption : [Algorithme MinMax],
+)
+
+#figure(align(start,text("
+313 match(s) gagné par les Noirs.
+648 match(s) gagné par les Blanc.
+39 match(s) nul(s).
+IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
+IA2 (minmax3) mean calculation time per move : 0.856059 ms (29983 moves played)
+")), caption: "Résultats de Random v MinMax sur 1000 parties")
+
+== Negamax
+
