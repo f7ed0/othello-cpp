@@ -15,6 +15,8 @@ IAInterface* IAInterface::selectByName(std::string name) {
         return (new MinMax(5));
     } else if(name == "minmax7"){
         return (new MinMax(7));
+    } else if(name == "minmax10"){
+        return (new MinMax(10));
     } else if(name == "alphabeta5"){
         return (new AlphaBeta(5));
     } else if(name == "alphabeta7"){
