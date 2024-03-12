@@ -51,10 +51,7 @@ L'enumeration `pawn` est le type de base utilisé dans la représentation du pla
   ```
   ],
   supplement: "Figure",
-<<<<<<< HEAD
   kind: figure,
-=======
->>>>>>> parent of 90b6925 (merger rendu)
   caption : [définition de `othello::pawn`],
 )
 
@@ -75,10 +72,7 @@ La classe `Board` est le coeur même du jeu. Elle contient la représentation du
   ```
   ],
   supplement: "Figure",
-<<<<<<< HEAD
   kind: figure,
-=======
->>>>>>> parent of 90b6925 (merger rendu)
   caption : [`othello::Board.cases` : représentation du plateau],
 )
 
@@ -200,35 +194,23 @@ Nous avons donc fait des recherches
   ```
   ],
   supplement: "Figure",
-<<<<<<< HEAD
   kind: figure,
   caption : [Algorithme MinMax],
 )
 
 #figure(rect[
 ```
-=======
-  caption : [Algorithme MinMax],
-)
-
-#figure(
-align(start,```
->>>>>>> parent of 90b6925 (merger rendu)
 313 match(s) gagné par les Noirs.
 648 match(s) gagné par les Blanc.
 39 match(s) nul(s).
 IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
 IA2 (minmax3) mean calculation time per move : 0.856059 ms (29983 moves played)
-<<<<<<< HEAD
 ```
 ], 
   supplement: "Figure",
   kind: figure,
   caption: "Résultats de Random v MinMax sur 1000 parties"
 )
-=======
-```), caption: "Résultats de Random (noirs) contre MinMax (blancs) sur 1000 parties")
->>>>>>> parent of 90b6925 (merger rendu)
 
 == Negamax
 
