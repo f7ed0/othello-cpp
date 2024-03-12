@@ -1,5 +1,5 @@
-#ifndef IA_ALPHABETA_HPP
-#define IA_ALPHABETA_HPP
+#ifndef IA_ALPHABETA_ABS_HPP
+#define IA_ALPHABETA_ABS_HPP
 
 #include "ia/alphabeta.hpp"
 

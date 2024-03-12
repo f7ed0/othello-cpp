@@ -2,6 +2,7 @@
 #include "ia/random.hpp"
 #include "ia/minmax.hpp"
 #include "ia/alphabeta.hpp"
+#include "ia/alphabeta_absolute.hpp"
 #include "errors/errors.hpp"
 
 using namespace IA;
@@ -23,6 +24,8 @@ IAInterface* IAInterface::selectByName(std::string name) {
         return (new AlphaBeta(7));
     } else if(name == "alphabeta10"){
         return (new AlphaBeta(10));
+    } else if(name == "alphabeta_abs10"){
+        return (new AlphaBeta_Absolute(10));
     } else {
         std::cout << "No IA named " << name << "." << std::endl;
         throw errors::OutOfBoundError();
