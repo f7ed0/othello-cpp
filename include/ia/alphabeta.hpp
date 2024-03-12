@@ -8,7 +8,7 @@ namespace IA {
         protected :
             int depth;
 
-            int heuristics(const othello::Board& current_board, const othello::pawn team, const othello::pawn player) override;
+            int heuristics(const othello::Board& current_board, const othello::pawn team ) override;
 
             static void launchAlphabeta(AlphaBeta* IA,const othello::Board& board,othello::pawn player,int depth, othello::pawn team, int* result);
             

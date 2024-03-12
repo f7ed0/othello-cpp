@@ -16,6 +16,6 @@ void Random::resetAI() {
     return;
 }
 
-int Random::heuristics(const othello::Board& current_board, const othello::pawn team,const othello::pawn player) {
+int Random::heuristics(const othello::Board& current_board, const othello::pawn team) {
     return 0;
 }

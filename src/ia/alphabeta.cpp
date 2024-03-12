@@ -41,7 +41,7 @@ int AlphaBeta::makeAMove(const othello::Board& current_board, othello::pawn team
 
 int AlphaBeta::alphabeta(const othello::Board& current_board,othello::pawn player, const int depth, othello::pawn team, int _alpha, int _beta) {
     if (depth == 0) {
-        return this->heuristics(current_board,team,player);
+        return this->heuristics(current_board,team);
     }
     std::vector<int> choices = current_board.listAllPlay(player);
     if(choices.size() == 0) {
@@ -52,10 +52,10 @@ int AlphaBeta::alphabeta(const othello::Board& current_board,othello::pawn playe
             int score[3] = {0,0,0};
             current_board.getPawnNumbers(score);
             if(score[team] > 32) {
-                return 32000 + this->heuristics(current_board,team,player);
+                return 32000 + this->heuristics(current_board,team);
             } 
             if (score[team] < 32){
-                return -32000 + this->heuristics(current_board,team,player);
+                return -32000 + this->heuristics(current_board,team);
             }
             return 0;
         }
@@ -104,7 +104,7 @@ void AlphaBeta::resetAI() {
     return;
 }
 
-int AlphaBeta::heuristics(const othello::Board& current_board, const othello::pawn team, const othello::pawn player) {
+int AlphaBeta::heuristics(const othello::Board& current_board, const othello::pawn team ) {
     int result = 0;
     for(int i=0 ; i < othello::Board::length ; i++) {
         if(current_board.getCase(i) == team) {
