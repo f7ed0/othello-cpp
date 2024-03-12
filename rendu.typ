@@ -50,7 +50,7 @@ L'enumeration `pawn` est le type de base utilisé dans la représentation du pla
   } pawn;
   ```
   ],
-  supplement: "figure",
+  supplement: "Figure",
   caption : [définition de `othello::pawn`],
 )
 
@@ -70,7 +70,7 @@ La classe `Board` est le coeur même du jeu. Elle contient la représentation du
   }
   ```
   ],
-  supplement: "figure",
+  supplement: "Figure",
   caption : [`othello::Board.cases` : représentation du plateau],
 )
 
@@ -86,20 +86,85 @@ Les methodes d'interactions sont les methodes publiques de la classe `othello::B
 
 Deux système de coordonées sont utilisable pour intéragir avec le plateau :
 
-+ L'index dans la stucture de donnée, avec lesquel on peut facilement retrouver les valeur lignes - colonnes :
+1. L'index dans la stucture de donnée, avec lesquel on peut facilement retrouver les valeur lignes - colonnes :
 #figure(
   $"index" = "colonnes" + ("lignes" times 8) <==> ( "lignes" equiv "index" [8]  and "colonnes" = "index" div 8 )$
 )
 Cette notation correspondant à l'index de la case dans le tableau de pion, elle est rapide mais difficile à comprendre pour une personne.
   
-+ Les coordonées plus classiques composée d'une lettre et d'un chiffre (ex. "d7")
+2. Les coordonées plus classiques composée d'une lettre et d'un chiffre (ex. "d7") qui sont utilisé pour l'entrée utilisateur.
 
 ===== Verifier si un coup est valide
 
+La verification d'un coup valide se fait via la fonction `canPlaceHere` de la classe `Board`
+
+#figure(
+  rect[
+    ```cpp
+    direction canPlaceHere(int index, pawn team) const
+    ```
+  ],
+  supplement: "Figure",
+  caption: [Fonction canPlaceHere]
+)
+
+La fonction prend en paramètre la coordonée où l'on souhaite placer le pion sous forme d'index, et l'équipe qui souhaite le placer. Après avoir verifié pour des raison évidente d'impossibilité (une pièce est deja présente sur la case par exemple) la fonction va ensuite verifier pour chaque direction si il est possible de le placer et ajoute au masque binaire `direction` la valeur correspondant à cette dernière.
+
+#figure(
+  rect[
+    ```cpp
+    typedef enum : direction {
+        NODIR = 0,
+        TOP = 1,
+        BOTTOM = 2,
+        LEFT = 4,
+        RIGHT = 8,
+        DTL = 16,
+        DTR = 32,
+        DBL = 64,
+        DBR = 128,
+    } dirs;
+    ```
+  ],
+  supplement: "Figure",
+  caption: [Enumération dirs]
+)
+
+Par exemple pour le coup suivant (les noirs essaient de placer un pion sur le point rouge), le retour de la fonction canPlaceHere sera de :
+
+#align(
+[$$gauche plus haut + diagonale haut-gauche = 4 + 1 + 16 = 21$$],
+center
+)
+
+
+
+#figure(
+  rect(image("img/move.png"),height: 20%),
+  supplement: "Figure",
+  caption: [Exemple de coup joué]
+)
+
 ===== Lister les coups jouables
 
+Le listage des coups jouables d'un joueur se fait à l'aide de la methode `listAllPlay` de la classe `Board`
+
+#figure(
+  rect[
+    ```cpp
+    std::vector<int> listAllPlay(pawn team) const;
+    ```
+  ],
+  supplement: "Figure",
+  caption: [Fonction canPlaceHere]
+)
+
+Le listage des coups jouable est assez simple, on itère sur toute les cases du plateau et on teste la possibilitée de placement sur toute les cases du plateau avec la fonction `canPlaceHere`. La fonction retourne ensuite la liste des coups jouables sous forme de `vecteur` de coordonée sous forme d'index.
+
+Durant no sessions de benchmarking nous avons noté un temps d'execution de $3 plus.minus 1\µs$ ce qui va être important par la suite puisque cette fonction va etre appelée frequement par les IAs
 
 == L'affichage et le benchmarking
+
 
 
 = Developpement des IA
@@ -117,25 +182,26 @@ Nous avons donc fait des recherches
     if maximizingPlayer then
         value := −∞
         for each child of node do
-            value := max(value, minimax(child, depth − 1, FALSE))
+            value := max(value, minimax(child, depth - 1, FALSE))
     else (* minimizing player *)
         value := +∞
         for each child of node do
-            value := min(value, minimax(child, depth − 1, TRUE))
+            value := min(value, minimax(child, depth - 1, TRUE))
     return value
   ```
   ],
-  supplement: "figure",
+  supplement: "Figure",
   caption : [Algorithme MinMax],
 )
 
-#figure(align(start,text("
+#figure(
+align(start,```
 313 match(s) gagné par les Noirs.
 648 match(s) gagné par les Blanc.
 39 match(s) nul(s).
 IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
 IA2 (minmax3) mean calculation time per move : 0.856059 ms (29983 moves played)
-")), caption: "Résultats de Random v MinMax sur 1000 parties")
+```), caption: "Résultats de Random (noirs) contre MinMax (blancs) sur 1000 parties")
 
 == Negamax
 
