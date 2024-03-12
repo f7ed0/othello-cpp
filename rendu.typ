@@ -121,6 +121,7 @@ La verification d'un coup valide se fait via la fonction `canPlaceHere` de la cl
     ```
   ],
   supplement: "Figure",
+  kind: figure,
   caption: [Fonction canPlaceHere]
 )
 
@@ -143,6 +144,7 @@ La fonction prend en paramètre la coordonée où l'on souhaite placer le pion s
     ```
   ],
   supplement: "Figure",
+  kind: figure,
   caption: [Enumération dirs]
 )
 
@@ -158,6 +160,7 @@ center
 #figure(
   rect(image("img/move.png"),height: 20%),
   supplement: "Figure",
+  kind: figure,
   caption: [Exemple de coup joué]
 )
 
@@ -172,6 +175,7 @@ Le listage des coups jouables d'un joueur se fait à l'aide de la methode `listA
     ```
   ],
   supplement: "Figure",
+  kind: figure,
   caption: [Fonction canPlaceHere]
 )
 
