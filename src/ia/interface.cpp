@@ -3,6 +3,7 @@
 #include "ia/minmax.hpp"
 #include "ia/alphabeta.hpp"
 #include "ia/alphabeta_absolute.hpp"
+#include "ia/alphabeta_mobility.hpp"
 #include "errors/errors.hpp"
 
 using namespace IA;
@@ -26,6 +27,8 @@ IAInterface* IAInterface::selectByName(std::string name) {
         return (new AlphaBeta(10));
     } else if(name == "alphabeta_abs10"){
         return (new AlphaBeta_Absolute(10));
+    } else if(name == "alphabeta_mob10"){
+        return (new AlphaBeta_Mobility(10));
     } else {
         std::cout << "No IA named " << name << "." << std::endl;
         throw errors::OutOfBoundError();
