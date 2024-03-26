@@ -3,6 +3,8 @@
 #include "ia/minmax.hpp"
 #include "ia/alphabeta.hpp"
 #include "ia/alphabeta_absolute.hpp"
+#include "ia/alphabeta_mobility.hpp"
+#include "ia/alphabeta_mixte.hpp"
 #include "errors/errors.hpp"
 #include <bits/stdc++.h>
 

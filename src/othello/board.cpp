@@ -172,6 +172,18 @@ std::ostream& othello::operator<<(std::ostream& os, const Board& item) {
     return os << "]";
 }
 
+// --------------------------------------------------------------------------------------
+
+pawn othello::other_team(const pawn team){
+    if(team == pawn::empty) {
+        return pawn::empty;
+    }
+    if (team == pawn::black){
+        return pawn::white;
+    }
+    return pawn::black;
+}
+
 // ---------------------------------------------------------------------------------------
 
 int max(int a, int b) {

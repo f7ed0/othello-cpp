@@ -139,6 +139,8 @@ namespace othello {
     };
 
     std::ostream& operator<<(std::ostream& os,const Board& item);
+
+    pawn other_team(const pawn team);
 };
 
 #endif
