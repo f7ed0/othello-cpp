@@ -251,15 +251,15 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
 }
 
 void showHelp() {
-    cout << "      othello by 0xf7ed0 & Kappaccino      " << endl;
-    cout << "------------------------------------------------------------------------------" << endl << endl;
-    cout << " usage : othello (--gui | --no-gui) --IA1 <name><=depth> --IA2 <name><=depth> " << endl << endl;
-    cout << "------------------------------------------------------------------------------" << endl << endl;
+    cout << "                             othello by 0xf7ed0 & Kappaccino                             " << endl;
+    cout << "-----------------------------------------------------------------------------------------" << endl << endl;
+    cout << " usage : othello [--gui | --no-gui] [--IA1 <name>=<depth>] [--IA2 <name>=<depth>] [args] " << endl << endl;
+    cout << "-----------------------------------------------------------------------------------------" << endl << endl;
     cout << "  --gui                     enable the GUI to play" << endl;
     cout << "  --no-gui                  play in CLI (default) " << endl;
-    cout << "  --progress                show real-time game progress" << endl;
-    cout << "  --no-result               don't show game results" << endl;
+    cout << "  --progress                show real-time game progres (CLI only) " << endl;
+    cout << "  --no-result               don't show game results (CLI only)" << endl;
     cout << "  --gamecount <count>       set the number of games to play" << endl;
-    cout << "  --IA1 <name><=depth>      set player1 (black) to AI with depth" << endl;
-    cout << "  --IA2 <name><=depth>      set player2 (white) to AI with depth" << endl;
+    cout << "  --IA1 <name>=<depth>      set player1 (black) to AI with depth" << endl;
+    cout << "  --IA2 <name>=<depth>      set player2 (white) to AI with depth" << endl;
 }
