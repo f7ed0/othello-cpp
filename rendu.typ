@@ -185,10 +185,184 @@ Durant no sessions de benchmarking nous avons noté un temps d'execution de $3 p
 
 == L'affichage et le benchmarking
 
+Notre jeu d'othello propose 2 interface pour jouer ou faire jouer des IA. Ces interface sont selectionnable et paramétrable via des arguments lors du lancement de l'application.
+
+=== Affichage avec interface graphique
+
+L'affichage avec iterface graphique utilise SDL2 pour permettre aux utilisateurs humain d'interagir plus naturellement avec le jeu. Pour jouer, il suffit de cliquer sur la case, les coups possibles sont affiché directement sur le board via un carré au centre des cases.
+
+#figure(
+  rect[
+    #image("img/gui.png")
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Interface utilisateur du jeu]
+)
+
+Cette interface a pour but de permettre a un humain de jouer au jeu dans des condition normale de jeu. Elle n'a pas grande valeur lors du benchmarking.
+
+=== Affichage CLI
+
+L'affichage CLI est l'affichage pour le benchmarking. Il admet des paramètre supplémentaire qui permettent de tester les IA de manière plus précise, nottament en permettant de jouer plusieurs partie à la suite afin de faire des analyse statistique.
+
+#figure(
+  rect[
+    ```
+                          othello by 0xf7ed0 & Kappaccino      
+  ------------------------------------------------------------------------------------
+
+    othello [--gui | --no-gui] [--IA1 <name>=<depth>] [--IA2 <name>=<depth>] [args] 
+
+  ------------------------------------------------------------------------------------
+
+    --gui                     enable the GUI to play
+    --no-gui                  play in CLI (default) 
+    --progress                show real-time game progres (CLI only) 
+    --no-result               don't show game results (CLI only)
+    --gamecount <count>       set the number of games to play
+    --IA1 <name>=<depth>      set player1 (black) to AI with depth
+    --IA2 <name>=<depth>      set player2 (white) to AI with depth
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [`--help` de l'application]
+)
+
+Une fois les parties jouées, un récapitulatif des parties et des temps de jeu est affiché afin de pouvoir facilement evaluer les performances des joueurs. 
+
+#figure(
+  rect[
+    ```
+    ================== RÉCAPITULATIFS DES SCORES ==================
+    10 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    80.7812 % du terrain occupé par les Noirs en moyenne
+    19.0625 % du terrain occupé par les Blanc en moyenne
+    0.15625 % du terrain non-occupé en moyenne
+    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    IA1 (alphabeta_mixte=6) mean calculation time per move : 66.6095 ms (316 moves played)
+    IA2 (random) mean calculation time per move : 0.00325442 ms (283 moves played)
+    ===============================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Récapitulatif de fin de session]
+)
+
+
+
+
 
 #pagebreak()
 
 = Developpement des IA
+
+== Intégration des IA dans le cadre de travail
+
+=== La classe abstraite `IA::Interface` et son intégration
+
+Pour permettre aux IA de jouer dans l'application, une classe abstraite nommée `IA::Interface` a été créée. Elle intègre toute les fonctions et attribut necessaire pour la communication avec l'interface ( CLI ou Graphique ) ainsi que des outils pour les IA (tel que la matrice de coup des cases et la fonction `switchTeam`). Il suffit alors de l'heriter pour créer son IA.
+
+#figure(
+  rect[
+    ```cpp
+    class IAInterface {
+        protected :
+
+            virtual int heuristics(const othello::Board& current_board, const othello::pawn team ) = 0;
+        
+        public :
+
+            static const int payoff_matrix[64];
+            
+            virtual int makeAMove(const othello::Board& current_board,othello::pawn team) = 0;
+
+            virtual void resetAI() {};
+
+            static IAInterface* selectByName(std::string name);
+
+            static othello::pawn switchTeam(othello::pawn p);
+    };
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Récapitulatif de fin de session]
+)
+
+La methode statique `selectByName` permet de generer une IA (classe fille de Interface donc) à partir de texte afin de pouvoir selectionner une IA en particulier facilement.
+
+#figure(
+  rect[
+    ```cpp
+    IAInterface* IAInterface::selectByName(std::string name) {
+      std::vector <std::string> tokens;
+      std::string intermediate; std::stringstream stream(name);
+      while(getline(stream, intermediate, '=')) tokens.push_back(intermediate);
+      if(tokens[0] == "random") return (new Random());
+      else if(tokens[0] == "minmax"){
+          return (new MinMax(std::stoi(tokens[1])));
+      } else if(tokens[0] == "alphabeta"){
+          return (new AlphaBeta(std::stoi(tokens[1])));
+      } else if(tokens[0] == "alphabeta_absolute"){
+          return (new AlphaBeta_Absolute(std::stoi(tokens[1])));
+      } else if(tokens[0] == "alphabeta_mobility"){
+          return (new AlphaBeta_Mobility(std::stoi(tokens[1])));
+      } else if(tokens[0] == "alphabeta_mixte"){
+          return (new AlphaBeta_Mixte(std::stoi(tokens[1])));
+      } else {
+          std::cout << "No IA named " << name << "." << std::endl;
+          throw errors::OutOfBoundError();
+      }
+    }
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Selection de l'IA via `IAInterface::selectByName`]
+)
+
+Cette classe est alors utilisé pour stocker et appeler les IA lors du déroulement de la partie, qu'importe la classe fille d'IA utilisée.
+
+Les IA sont alors appelée par la methode `makeAMove` par l'application pour recuperer leur coup.
+
+#figure(
+  rect[
+    ```cpp
+    // La fonction IA play est une fonction statique qui appelle makeAMove
+    // Les methodes de classe ne peuvent pas être utilisé pour un thread tel quel
+    if(!gameEnded && ((current_player == othello::pawn::black && isPlayer1AI) || (current_player == othello::pawn::white && isPlayer2AI))) {
+        if(!IA_launched) {
+            IA_thinking = true;
+            IA_launched = true;
+            if(this->current_player == othello::pawn::black){
+                this->IAthread = new std::thread(Window::IAPlay,this->IA1,*(this->board),this->current_player,&IA_thinking,&IA_result);
+            } else {
+                this->IAthread = new std::thread(Window::IAPlay,this->IA2,*(this->board),this->current_player,&IA_thinking,&IA_result);
+            }
+        } else {
+            if(!IA_thinking) {
+                if(this->IAthread->joinable()) {
+                    this->IAthread->join();
+                    delete this->IAthread;
+                }
+                IA_launched = false;
+                this->placePawn(IA_result);
+            }
+        }
+    }
+  ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Execution des coups d'une IA en mode GUI]
+)
+
 
 == MinMax
 Avant de procéder à l'implémentation de l'algorithme de MinMax il était judicieux de bien comprendre ce dernier.
@@ -304,3 +478,11 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
   kind: figure,
   caption : [`NegaMax::negamax()` : Implémentation de la couleur],
 )
+=======
+#pagebreak(weak: true)
+
+= Analyse des heuristiques
+
+== Heritage et changement d'heuristiques
+
+
