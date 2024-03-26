@@ -116,6 +116,8 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
     long move_count1 = 0;
     long move_count2 = 0;
 
+    int score_sum[3] = {0,0,0};
+
     for(int i =0 ; i < gamecount ; i++) {
         cout << "game " << i+1 << " of " << gamecount << endl;
         othello::Board a;
@@ -124,6 +126,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
         int player_index = 0;
         bool end_flag[2] = {0,0};
         int score[3];
+
         int count = 1;
         while(true){
             vector<int> plays = a.listAllPlay(players[player_index]);
@@ -209,7 +212,7 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
 
         a.getPawnNumbers(score);
         cout << "vide : " << score[othello::pawn::empty] << "\tnoir : " << score[othello::pawn::black] << "\tblanc : " << score[othello::pawn::white] << endl;
-        cout << endl;
+
 
         if(score[othello::pawn::black] < score[othello::pawn::white]) {
             cout << "Victoire des blancs." << endl;
@@ -222,6 +225,13 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
             winloss[othello::pawn::empty] ++;
         }
 
+        // MAJ DES AIRES
+        for( int i = 0 ; i < 3 ; i++ ) {
+            score_sum[i] += score[i];
+        }
+
+        cout << endl;
+
         if(IA1) {
             IA_black->resetAI();
         }
@@ -230,17 +240,24 @@ int playNoGui(bool IA1, bool IA2, string name1, string name2,int gamecount,bool 
         }
     }
 
-
+    cout << "================== RÉCAPITULATIFS DES SCORES ==================" << endl;
     cout << winloss[othello::pawn::black] << " match(s) gagné par les Noirs." << endl;
     cout << winloss[othello::pawn::white] << " match(s) gagné par les Blanc." << endl;
     cout << winloss[othello::pawn::empty] << " match(s) nul(s)." << endl;
+    cout << "============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============" << endl;
+    cout << (double)(100*score_sum[othello::pawn::black])/(double)(gamecount*64) << " % du terrain occupé par les Noirs en moyenne" << endl;
+    cout << (double)(100*score_sum[othello::pawn::white])/(double)(gamecount*64) << " % du terrain occupé par les Blanc en moyenne" << endl;
+    cout << (double)(100*score_sum[othello::pawn::empty])/(double)(gamecount*64) << " % du terrain non-occupé en moyenne" << endl;
+    if ( move_count1 > 0 || move_count2 > 0 ) {
+        cout << "============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============" << endl;
+        if(move_count1 > 0) {
+            cout << "IA1 (" + name1 + ") mean calculation time per move : " << (mean_time_move1 / (((double) move_count1)*1000)) << " ms (" << move_count1 << " moves played)" << endl;
+        }
 
-    if(move_count1 > 0) {
-        cout << "IA1 (" + name1 + ") mean calculation time per move : " << (mean_time_move1 / (((double) move_count1)*1000)) << " ms (" << move_count1 << " moves played)" << endl;
-    }
-
-    if(move_count2 > 0) {
-        cout << "IA2 (" + name2 + ") mean calculation time per move : " << (mean_time_move2 / (((double) move_count2)*1000)) << " ms (" << move_count2 << " moves played)"  << endl;
+        if(move_count2 > 0) {
+            cout << "IA2 (" + name2 + ") mean calculation time per move : " << (mean_time_move2 / (((double) move_count2)*1000)) << " ms (" << move_count2 << " moves played)"  << endl;
+        }
+        cout << "===============================================================" << endl;
     }
 
     if(gamecount == 0) {
