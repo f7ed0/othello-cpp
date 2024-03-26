@@ -365,20 +365,20 @@ Les IA sont alors appelée par la methode `makeAMove` par l'application pour rec
 
 
 == MinMax
-Avant de procéder au développement de l'IA il était judicieux de bien comprendre l'algorithme de ce dernier.
-Nous avons donc fait des recherches 
+Avant de procéder à l'implémentation de l'algorithme de MinMax il était judicieux de bien comprendre ce dernier.
+Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
 
 #figure(
   rect[
-  ```py
-  function minimax(node, depth, maximizingPlayer) is
-    if depth = 0 or node is a terminal node then
-        return the heuristic value of node
+  ```cpp
+  function minimax(node, depth, maximizingPlayer)
+    if depth = 0 or node is terminal then
+        return heuristic value of node
     if maximizingPlayer then
         value := −∞
         for each child of node do
             value := max(value, minimax(child, depth - 1, FALSE))
-    else (* minimizing player *)
+    else //minimizing player 
         value := +∞
         for each child of node do
             value := min(value, minimax(child, depth - 1, TRUE))
@@ -390,25 +390,99 @@ Nous avons donc fait des recherches
   caption : [Algorithme MinMax],
 )
 
+En suite, nous avons implémenté l'algorithme en C++ en utilisant la classe `othello::Board` pour représenter le plateau de jeu et `othello:pawn` pour représenter le joueur qu'on veut maximiser.
+
+De plus, le code differe légerement du pseudo-code dans l'implémentation du joueur a maximiser. En effet, dans le pseudo-code, le joueur a maximiser est le joueur qui maximise la valeur de la fonction heuristique, alors que dans notre implémentation, le joueur a maximiser est le joueur qui joue le coup. Cela permet de partager la fonction avec les deux joueur via la fonction `MinMax::switchTeam(current_player)`.
+
+#figure(
+  rect[
+```cpp
+if (player == team){
+        value = INT32_MIN;
+        for (int i=0 ; i < possibility ; i++) {
+            othello::Board* next_move = new othello::Board(current_board);
+            if(next_move->placePawn(choices.at(i),player) == 0) {
+                throw -1;
+            }
+            value = std::max(value,this->minmax(*next_move,MinMax::switchTeam(player),depth-1,team));  
+            delete next_move;     
+        }
+    } else {
+        value = INT32_MAX;
+        //...
+    }
+    return value;
+```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption : [`MinMax::minmax()` : Implémentation min/max du joueur],
+)
+
+La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entre une IA aléatoire et une IA MinMax avec une profondeur de 3.
+
 #figure(rect[
 ```
 313 match(s) gagné par les Noirs.
 648 match(s) gagné par les Blanc.
 39 match(s) nul(s).
 IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
-IA2 (minmax3) mean calculation time per move : 0.856059 ms (29983 moves played)
+IA2 (minmax=3) mean calculation time per move : 0.856059 ms (29983 moves played)
 ```
 ], 
   supplement: "Figure",
   kind: figure,
   caption: "Résultats de Random v MinMax sur 1000 parties"
-)
+)<minmax_results>
 
 == Negamax
 
+L'algorithme de Negamax est une simplification de l'algorithme MinMax. En effet, Negamax est une version simplifiée de MinMax où les valeurs des noeuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
+
+#figure(
+  rect[
+  ```cpp
+  function negamax(node, depth, α, β, color)
+    if depth = 0 or node is terminal then
+        return color * heuristic value of node
+    value := −∞
+    for each child of node do
+        value := max(value, −negamax(child, depth - 1, −β, −α, −color))
+        α := max(α, value)
+        if α ≥ β then
+            break
+    return value
+  ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption : [Algorithme Negamax],
+)
+
+Afin de simplifier l'algorithme la notion de couleur est introduite. La couleur est un entier qui vaut 1 si le joueur est le joueur maximisant et -1 si c'est le joueur minimisant.
+
+La couleur est utilisé pour inverser la valeur de la fonction heuristique si le joueur est le joueur minimisant.
+
+#figure(
+  rect[
+  ```cpp
+  int color = (player == team) ? 1 : -1;
+    
+    if (depth == 0) {
+        return color*this->heuristics(current_board,team);
+    }
+    //...
+  ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption : [`NegaMax::negamax()` : Implémentation de la couleur],
+)
+=======
 #pagebreak(weak: true)
 
 = Analyse des heuristiques
 
 == Heritage et changement d'heuristiques
+
 
