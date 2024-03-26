@@ -28,6 +28,10 @@ IAInterface* IAInterface::selectByName(std::string name) {
         return (new AlphaBeta(std::stoi(tokens[1])));
     } else if(tokens[0] == "alphabeta_absolute"){
         return (new AlphaBeta_Absolute(std::stoi(tokens[1])));
+    } else if(tokens[0] == "alphabeta_mobility"){
+        return (new AlphaBeta_Mobility(std::stoi(tokens[1])));
+    } else if(tokens[0] == "alphabeta_mixte"){
+        return (new AlphaBeta_Mixte(std::stoi(tokens[1])));
     } else {
         std::cout << "No IA named " << name << "." << std::endl;
         throw errors::OutOfBoundError();
