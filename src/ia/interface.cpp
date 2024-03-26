@@ -6,36 +6,33 @@
 #include "ia/alphabeta_mobility.hpp"
 #include "ia/alphabeta_mixte.hpp"
 #include "errors/errors.hpp"
+#include <bits/stdc++.h>
 
 using namespace IA;
 
 IAInterface* IAInterface::selectByName(std::string name) {
-    if(name == "random") {
+    
+    std::vector <std::string> tokens;
+    std::string intermediate;
+    std::stringstream stream(name);
+
+    while(getline(stream, intermediate, '=')) {
+        tokens.push_back(intermediate);
+    }
+
+    if(tokens[0] == "random") {
         return (new Random());
-    } else if(name == "minmax3"){
-        return (new MinMax(3));
-    } else if(name == "minmax5"){
-        return (new MinMax(5));
-    } else if(name == "minmax7"){
-        return (new MinMax(7));
-    } else if(name == "minmax10"){
-        return (new MinMax(10));
-    } else if(name == "alphabeta5"){
-        return (new AlphaBeta(5));
-    } else if(name == "alphabeta7"){
-        return (new AlphaBeta(7));
-    } else if(name == "alphabeta10"){
-        return (new AlphaBeta(10));
-    } else if(name == "alphabeta_abs10"){
-        return (new AlphaBeta_Absolute(10));
-    } else if(name == "alphabeta_mob10"){
-        return (new AlphaBeta_Mobility(10));
-    } else if(name == "alphabeta_mix10"){
-        return (new AlphaBeta_Mixte(10));
+    } else if(tokens[0] == "minmax"){
+        return (new MinMax(std::stoi(tokens[1])));
+    } else if(tokens[0] == "alphabeta"){
+        return (new AlphaBeta(std::stoi(tokens[1])));
+    } else if(tokens[0] == "alphabeta_absolute"){
+        return (new AlphaBeta_Absolute(std::stoi(tokens[1])));
     } else {
         std::cout << "No IA named " << name << "." << std::endl;
         throw errors::OutOfBoundError();
     }
+
 }
 
 const int IAInterface::payoff_matrix[64] = {
