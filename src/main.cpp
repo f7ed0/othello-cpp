@@ -88,9 +88,9 @@ int playGUI(bool IA1, bool IA2, string name1, string name2) {
 
     w->mainLoop();
 
-    gui::Window::SDLQuit();
-
     delete w;
+
+    gui::Window::SDLQuit();    
 
     return 0;
 }

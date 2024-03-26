@@ -80,6 +80,7 @@ Window::Window(bool player1IA, bool player2IA, std::string IA1, std::string IA2)
 }
 
 Window::~Window() {
+
     SDL_DestroyTexture(this->textures[BLACK_PAWN_TEXTURE]);
     SDL_DestroyTexture(this->textures[WHITE_PAWN_TEXTURE]);
     SDL_DestroyTexture(this->textures[WOOD_BOARD_TEXTURE]);
@@ -87,6 +88,12 @@ Window::~Window() {
     TTF_CloseFont(this->font);
 
     delete this->board;
+    if(this->IA1 != NULL && this->isPlayer1AI) {
+        delete this->IA1;
+    }
+    if(this->IA2 != NULL && this->isPlayer2AI) {
+        delete this->IA2;
+    }
 
     free(this->score);
 }
@@ -97,7 +104,7 @@ void Window::SDLInit() {
     }
 
     if(TTF_Init() != 0){
-        throw TTF_GetError();
+        throw errors::SDLError(TTF_GetError());
     } 
 
     srand(time(NULL));
@@ -177,7 +184,6 @@ int Window::eventPolling() {
         }
         evt ++;
     }
-
     return evt;
 }
 
