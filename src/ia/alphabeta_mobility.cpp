@@ -23,6 +23,6 @@ int AlphaBeta_Mobility::heuristics(const othello::Board& current_board, const ot
     std::vector plays = current_board.listAllPlay(team);
     std::vector nmi_plays = current_board.listAllPlay(othello::other_team(team));
 
-    return plays.size() - nmi_plays.size();
+    return plays.size() - nmi_plays.size() + diag_score;
 
 }
