@@ -12,7 +12,7 @@
 #pagebreak()
 
 #outline(
-  title: "Sommaire",
+  title: "Table des Matières",
   depth: 4,
   indent: true,
 )
@@ -485,4 +485,69 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
 
 == Heritage et changement d'heuristiques
 
+#figure(
+  rect[
+    ```
+    ================== RÉCAPITULATIFS DES SCORES ==================
+    20 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    62.9588 % du terrain occupé par les Noirs en moyenne
+    36.1719 % du terrain occupé par les Blanc en moyenne
+    0.859375 % du terrain non-occupé en moyenne
+    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    IA1 (alphabeta=10) mean calculation time per move : 16573.5 ms (606 moves played)
+    IA2 (random) mean calculation time per move : 0.00394168 ms (583 moves played)
+    ===============================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats d'α-β]
+)
+
+#figure(
+  rect[
+    ```
+    ================== RÉCAPITULATIFS DES SCORES ==================
+    20 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    96.7188 % du terrain occupé par les Noirs en moyenne
+    2.42188 % du terrain occupé par les Blanc en moyenne
+    0.859375 % du terrain non-occupé en moyenne
+    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    IA1 (alphabeta_mixte=10) mean calculation time per move : 30848.2 ms (680 moves played)
+    IA2 (random) mean calculation time per move : 0.00397053 ms (509 moves played)
+    ===============================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats d'α-β mixte]
+)
+
+#figure(
+  rect[
+    ```
+    ================== RÉCAPITULATIFS DES SCORES ==================
+    19 match(s) gagné par les Noirs.
+    1 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    82.3438 % du terrain occupé par les Noirs en moyenne
+    15.625 % du terrain occupé par les Blanc en moyenne
+    2.03125 % du terrain non-occupé en moyenne
+    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    IA1 (alphabeta_absolute=10) mean calculation time per move : 1205.58 ms (629 moves played)
+    IA2 (random) mean calculation time per move : 0.00413578 ms (545 moves played)
+    ===============================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats d'α-β absolue]
+)
 
