@@ -1,3 +1,6 @@
+#import "@preview/lovelace:0.2.0": *
+#show: setup-lovelace
+
 #align(center + top, text("Compte Rendu de Traveaux Pratiques - Fondement de l'IA"))
 #line(length: 100%)
 \ \ \
@@ -11,6 +14,9 @@
 
 #pagebreak()
 
+#set page(numbering: "1")
+#counter(page).update(1)
+
 #outline(
   title: "Table des Matières",
   depth: 4,
@@ -18,7 +24,6 @@
 )
 
 #pagebreak()
-
 #outline(
   title: "Table des Figures",
   target: figure.where(kind: figure)
@@ -105,6 +110,10 @@ Deux système de coordonées sont utilisable pour intéragir avec le plateau :
 1. L'index dans la stucture de donnée, avec lesquel on peut facilement retrouver les valeur lignes - colonnes :
 #figure(
   $"index" = "colonnes" + ("lignes" times 8) <==> ( "lignes" equiv "index" [8]  and "colonnes" = "index" div 8 )$
+)
+
+#figure(
+  [_index_ $=$ _colonnes_ $+$ (_lignes_ $times 8$) $<==>$ (_lignes_ $equiv$ _index[8]_  $and$ _colonnes_ $=$ _index_ $div 8$)]
 )
 Cette notation correspondant à l'index de la case dans le tableau de pion, elle est rapide mais difficile à comprendre pour une personne.
   
@@ -235,18 +244,18 @@ Une fois les parties jouées, un récapitulatif des parties et des temps de jeu 
 #figure(
   rect[
     ```
-    ================== RÉCAPITULATIFS DES SCORES ==================
+    ========================== RÉCAPITULATIFS DES SCORES ==========================
     10 match(s) gagné par les Noirs.
     0 match(s) gagné par les Blanc.
     0 match(s) nul(s).
-    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    ===================== RÉCAPITULATIFS DES AIRES PAR MATCH ======================
     80.7812 % du terrain occupé par les Noirs en moyenne
     19.0625 % du terrain occupé par les Blanc en moyenne
     0.15625 % du terrain non-occupé en moyenne
-    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    ==================== RÉCAPITULATIFS DES TEMPS D'EXECUTION =====================
     IA1 (alphabeta_mixte=6) mean calculation time per move : 66.6095 ms (316 moves played)
     IA2 (random) mean calculation time per move : 0.00325442 ms (283 moves played)
-    ===============================================================
+    ===============================================================================
     ```
   ],
   supplement: "Figure",
@@ -363,31 +372,39 @@ Les IA sont alors appelée par la methode `makeAMove` par l'application pour rec
   caption: [Execution des coups d'une IA en mode GUI]
 )
 
+#pagebreak()
 
 == MinMax
 Avant de procéder à l'implémentation de l'algorithme de MinMax il était judicieux de bien comprendre ce dernier.
 Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
 
 #figure(
-  rect[
-  ```cpp
-  function minimax(node, depth, maximizingPlayer)
-    if depth = 0 or node is terminal then
-        return heuristic value of node
-    if maximizingPlayer then
-        value := −∞
-        for each child of node do
-            value := max(value, minimax(child, depth - 1, FALSE))
-    else //minimizing player 
-        value := +∞
-        for each child of node do
-            value := min(value, minimax(child, depth - 1, TRUE))
-    return value
-  ```
-  ],
+  algorithm(
+    caption: [Minmax],
+    pseudocode(
+      no-number,
+      [*entrées:* _nœud_ ; _profondeur_ ; _joueurMax_],
+      no-number,
+      [*sortie:* valeur heuristique de _nœud_],
+      [*si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*], ind,
+        [*retourner* heuristique(_nœud_)], ded,
+      [*si* _joueurMax_ *alors*], ind,
+        [_valeur_ $ <- -∞$],
+        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
+          [_valeur_ $<- $ max(v, minmax(_enfant_, profondeur$-1$, Faux))], ded,
+        [*fin*], ded,
+      [*sinon*], ind,
+        [_valeur_ $<- +∞$],
+        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
+          [_valeur_ $<- $ min(v, minmax(_enfant_, profondeur$-1$, Vrai))], ded,
+        [*fin*], ded,
+      [*fin*],
+      [*retourner* _valeur_]
+  )
+),
   supplement: "Figure",
   kind: figure,
-  caption : [Algorithme MinMax],
+  caption : [Algorithme Minmax]
 )
 
 En suite, nous avons implémenté l'algorithme en C++ en utilisant la classe `othello::Board` pour représenter le plateau de jeu et `othello:pawn` pour représenter le joueur qu'on veut maximiser.
@@ -421,42 +438,48 @@ if (player == team){
 
 La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entre une IA aléatoire et une IA MinMax avec une profondeur de 3.
 
-#figure(rect[
-```
-313 match(s) gagné par les Noirs.
-648 match(s) gagné par les Blanc.
-39 match(s) nul(s).
-IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
-IA2 (minmax=3) mean calculation time per move : 0.856059 ms (29983 moves played)
-```
-], 
+#figure(
+  rect[
+  ```
+  313 match(s) gagné par les Noirs.
+  648 match(s) gagné par les Blanc.
+  39 match(s) nul(s).
+  IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
+  IA2 (minmax=3) mean calculation time per move : 0.856059 ms (29983 moves played)
+  ```
+  ], 
   supplement: "Figure",
   kind: figure,
-  caption: "Résultats de Random v MinMax sur 1000 parties"
+  caption: "Résultats de Random - MinMax sur 20 parties"
 )<minmax_results>
 
 == Negamax
 
-L'algorithme de Negamax est une simplification de l'algorithme MinMax. En effet, Negamax est une version simplifiée de MinMax où les valeurs des noeuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
+L'algorithme de Negamax est une simplification de l'algorithme MinMax. En effet, Negamax est une version simplifiée de MinMax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
 
 #figure(
-  rect[
-  ```cpp
-  function negamax(node, depth, α, β, color)
-    if depth = 0 or node is terminal then
-        return color * heuristic value of node
-    value := −∞
-    for each child of node do
-        value := max(value, −negamax(child, depth - 1, −β, −α, −color))
-        α := max(α, value)
-        if α ≥ β then
-            break
-    return value
-  ```
-  ],
+  algorithm(
+    caption: [Negamax],
+    pseudocode(
+      no-number,
+      [*entrées:* _nœud_ ; _profondeur_ ; $α$ ; $β$ ; _couleur_],
+      no-number,
+      [*sortie:* valeur heuristique de _nœud_],
+      [*si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*], ind,
+        [*retourner* _couleur_ $times$ heuristique(_nœud_)], ded,
+      [_valeur_ $ <- -∞$],
+      [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
+        [_valeur_ $<- $ max(v, $-$negamax(_enfant_, profondeur$-1$, $-β$, $-α$, $-$_couleur_))], ded,
+        [$α$ $<- $ max(α, _valeur_)],
+        [*si* $α$ $gt.eq β$ *alors*], ind,
+          [*sortir*], ded,
+      [*fin*],
+      [*retourner* _valeur_]
+  )
+), 
   supplement: "Figure",
   kind: figure,
-  caption : [Algorithme Negamax],
+  caption : [Algorithme Negamax]
 )
 
 Afin de simplifier l'algorithme la notion de couleur est introduite. La couleur est un entier qui vaut 1 si le joueur est le joueur maximisant et -1 si c'est le joueur minimisant.
@@ -488,66 +511,88 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
 #figure(
   rect[
     ```
-    ================== RÉCAPITULATIFS DES SCORES ==================
+    =========================== RÉCAPITULATIFS DES SCORES ===========================
     20 match(s) gagné par les Noirs.
     0 match(s) gagné par les Blanc.
     0 match(s) nul(s).
-    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    ====================== RÉCAPITULATIFS DES AIRES PAR MATCH =======================
     62.9588 % du terrain occupé par les Noirs en moyenne
     36.1719 % du terrain occupé par les Blanc en moyenne
     0.859375 % du terrain non-occupé en moyenne
-    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    ===================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
     IA1 (alphabeta=10) mean calculation time per move : 16573.5 ms (606 moves played)
     IA2 (random) mean calculation time per move : 0.00394168 ms (583 moves played)
-    ===============================================================
+    =================================================================================
     ```
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats d'α-β]
+  caption: [Résultats d'$α - β$]
 )
 
 #figure(
   rect[
     ```
-    ================== RÉCAPITULATIFS DES SCORES ==================
+    ========================== RÉCAPITULATIFS DES SCORES ==========================
     20 match(s) gagné par les Noirs.
     0 match(s) gagné par les Blanc.
     0 match(s) nul(s).
-    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    ===================== RÉCAPITULATIFS DES AIRES PAR MATCH ======================
     96.7188 % du terrain occupé par les Noirs en moyenne
     2.42188 % du terrain occupé par les Blanc en moyenne
     0.859375 % du terrain non-occupé en moyenne
-    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    ==================== RÉCAPITULATIFS DES TEMPS D'EXECUTION =====================
     IA1 (alphabeta_mixte=10) mean calculation time per move : 30848.2 ms (680 moves played)
     IA2 (random) mean calculation time per move : 0.00397053 ms (509 moves played)
-    ===============================================================
+    ===============================================================================
     ```
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats d'α-β mixte]
+  caption: [Résultats d'$α - β$ mixte]
 )
 
 #figure(
   rect[
     ```
-    ================== RÉCAPITULATIFS DES SCORES ==================
+    ============================ RÉCAPITULATIFS DES SCORES ===========================
     19 match(s) gagné par les Noirs.
     1 match(s) gagné par les Blanc.
     0 match(s) nul(s).
-    ============= RÉCAPITULATIFS DES AIRES PAR MATCH ==============
+    ======================= RÉCAPITULATIFS DES AIRES PAR MATCH =======================
     82.3438 % du terrain occupé par les Noirs en moyenne
     15.625 % du terrain occupé par les Blanc en moyenne
     2.03125 % du terrain non-occupé en moyenne
-    ============ RÉCAPITULATIFS DES TEMPS D'EXECUTION =============
+    ====================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
     IA1 (alphabeta_absolute=10) mean calculation time per move : 1205.58 ms (629 moves played)
     IA2 (random) mean calculation time per move : 0.00413578 ms (545 moves played)
-    ===============================================================
+    ==================================================================================
     ```
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats d'α-β absolue]
+  caption: [Résultats d'$α - β$ absolue]
+)
+
+#figure(
+  rect[
+    ```
+    ============================ RÉCAPITULATIFS DES SCORES ===========================
+    20 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ======================= RÉCAPITULATIFS DES AIRES PAR MATCH =======================
+    83.3594 % du terrain occupé par les Noirs en moyenne
+    11.1719 % du terrain occupé par les Blanc en moyenne
+    5.46875 % du terrain non-occupé en moyenne
+    ====================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
+    IA1 (alphabeta_mobility=10) mean calculation time per move : 8838.38 ms (638 moves played)
+    IA2 (random) mean calculation time per move : 0.0035 ms (492 moves played)
+    ==================================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats d'$α - β$ mobilité]
 )
 
