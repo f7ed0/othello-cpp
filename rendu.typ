@@ -19,7 +19,7 @@
 
 #outline(
   title: "Table des Matières",
-  depth: 4,
+  depth: 3,
   indent: true,
 )
 
@@ -49,11 +49,11 @@ Nous avons décidé d'utiliser le language C++ lors de ce TP pour sa rapiditée 
 
 Cette partie du rapport detaillera les differents algorithme et structures mis en place lors de ce projet pour faciliter l'interaction des IA avec le jeu.
 
-== La logique du jeu 
+== Logique du jeu 
 
 Othello etant un jeu simple, notre implémentation se base sur 3 structures detaillées ci dessous. Toutes ces stuctures et methodes font partie du namespace `othello`.
 
-=== L'enumeration `othello::pawn`
+=== Enumeration `othello::pawn`
 
 L'enumeration `pawn` est le type de base utilisé dans la représentation du plateau de jeu.
 
@@ -76,7 +76,7 @@ L'enumeration `pawn` est le type de base utilisé dans la représentation du pla
 
 Cette représentation est basée sur le type `unsigned short` qui est codé sur 16 bits. ce choix permet d'avoir une représentation compacte (comparé au type `int` ou `unsigned int`) tout en ayant la capacité d'etre utilisable en tant qu'index pour les tableaux par exemple.
 
-=== La classe `othello::Board`
+=== Classe `othello::Board`
 
 La classe `Board` est le coeur même du jeu. Elle contient la représentation du plateau de jeu : un tableau de 64 `othello::pawn` (8x8 cases). le tableau est alloué dynamiquement à la création de l'objet et liberée à sa destruction.
 
@@ -99,21 +99,18 @@ Cette classe gère la logique du jeu au niveau du placement des jetons, mais pas
 
 `othello::Board.case` est un attribut privé, il n'est donc modifiable que par des méthodes définies dans la classe `ohtello::Board`. Cela permet de s'assurer que la structure est manipulé seulement de la manière prévue dans les méthodes d'interactions.
 
-==== Methodes d'interactions
+=== Methodes d'interactions
 
 Les methodes d'interactions sont les methodes publiques de la classe `othello::Board`.
 
-===== Systèmes de coordonnées
+==== Systèmes de coordonnées
 
 Deux système de coordonées sont utilisable pour intéragir avec le plateau :
 
 1. L'index dans la stucture de donnée, avec lesquel on peut facilement retrouver les valeur lignes - colonnes :
-#figure(
-  $"index" = "colonnes" + ("lignes" times 8) <==> ( "lignes" equiv "index" [8]  and "colonnes" = "index" div 8 )$
-)
 
 #figure(
-  [_index_ $=$ _colonnes_ $+$ (_lignes_ $times 8$) $<==>$ (_lignes_ $equiv$ _index[8]_  $and$ _colonnes_ $=$ _index_ $div 8$)]
+  [_index_ $=$ _colonnes_ $+$ (_lignes_ $times 8$) $<==>$ (_lignes_ $equiv$ _index_ [8]  $and$ _colonnes_ $=$ _index_ $div 8$)]
 )
 Cette notation correspondant à l'index de la case dans le tableau de pion, elle est rapide mais difficile à comprendre pour une personne.
   
@@ -160,7 +157,7 @@ La fonction prend en paramètre la coordonée où l'on souhaite placer le pion s
 Par exemple pour le coup suivant (les noirs essaient de placer un pion sur le point rouge), le retour de la fonction canPlaceHere sera de :
 
 #align(
-[$$gauche plus haut + diagonale haut-gauche = 4 + 1 + 16 = 21$$],
+[_gauche_ $+$ _haut_ $+$ _diagonale haut-gauche_ = $4 + 1 + 16 = 21$],
 center
 )
 
@@ -192,7 +189,7 @@ Le listage des coups jouable est assez simple, on itère sur toute les cases du 
 
 Durant no sessions de benchmarking nous avons noté un temps d'execution de $3 plus.minus 1\µs$ ce qui va être important par la suite puisque cette fonction va etre appelée frequement par les IAs
 
-== L'affichage et le benchmarking
+== Affichage et benchmarking
 
 Notre jeu d'othello propose 2 interface pour jouer ou faire jouer des IA. Ces interface sont selectionnable et paramétrable via des arguments lors du lancement de l'application.
 
@@ -269,11 +266,11 @@ Une fois les parties jouées, un récapitulatif des parties et des temps de jeu 
 
 #pagebreak()
 
-= Developpement des IA
+= Développement des IA
 
 == Intégration des IA dans le cadre de travail
 
-=== La classe abstraite `IA::Interface` et son intégration
+=== Classe abstraite `IA::Interface` et son intégration
 
 Pour permettre aux IA de jouer dans l'application, une classe abstraite nommée `IA::Interface` a été créée. Elle intègre toute les fonctions et attribut necessaire pour la communication avec l'interface ( CLI ou Graphique ) ainsi que des outils pour les IA (tel que la matrice de coup des cases et la fonction `switchTeam`). Il suffit alors de l'heriter pour créer son IA.
 
@@ -374,32 +371,29 @@ Les IA sont alors appelée par la methode `makeAMove` par l'application pour rec
 
 #pagebreak()
 
-== MinMax
-Avant de procéder à l'implémentation de l'algorithme de MinMax il était judicieux de bien comprendre ce dernier.
+== Minmax
+Avant de procéder à l'implémentation de l'algorithme de Minmax il était judicieux de bien comprendre ce dernier.
 Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
 
 #figure(
   algorithm(
     caption: [Minmax],
-    pseudocode(
-      no-number,
-      [*entrées:* _nœud_ ; _profondeur_ ; _joueurMax_],
-      no-number,
-      [*sortie:* valeur heuristique de _nœud_],
-      [*si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*], ind,
-        [*retourner* heuristique(_nœud_)], ded,
-      [*si* _joueurMax_ *alors*], ind,
-        [_valeur_ $ <- -∞$],
-        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
-          [_valeur_ $<- $ max(v, minmax(_enfant_, profondeur$-1$, Faux))], ded,
-        [*fin*], ded,
-      [*sinon*], ind,
-        [_valeur_ $<- +∞$],
-        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
-          [_valeur_ $<- $ min(v, minmax(_enfant_, profondeur$-1$, Vrai))], ded,
-        [*fin*], ded,
-      [*fin*],
-      [*retourner* _valeur_]
+    pseudocode-list([
+    - *entrées:* _nœud_, _profondeur_, _joueurMax_
+    - *sortie:* _entier_
+    + *debut*
+      + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+        + *retourner* heuristique(_nœud_)
+      + *si* _joueurMax_ *alors*
+        + _valeur_ $ <- -infinity$
+        + *pour chaque* _enfant_ de _nœud_ *faire*
+          + _valeur_ $<- $ max(v, minmax(_enfant_, profondeur$-1$, Faux))
+      + *sinon*
+        + _valeur_ $<- +infinity$
+        + *pour chaque* _enfant_ de _nœud_ *faire*
+          + _valeur_ $<- $ min(v, minmax(_enfant_, profondeur$-1$, Vrai))
+      + *retourner* _valeur_
+    ], indentation-guide-stroke: .5pt
   )
 ),
   supplement: "Figure",
@@ -436,8 +430,9 @@ if (player == team){
   caption : [`MinMax::minmax()` : Implémentation min/max du joueur],
 )
 
-La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entre une IA aléatoire et une IA MinMax avec une profondeur de 3.
+La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entre une IA aléatoire et une IA Minmax avec une profondeur de 3.
 
+// TODO : Ajouter les résultats de minmax
 #figure(
   rect[
   ```
@@ -450,31 +445,32 @@ La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entr
   ], 
   supplement: "Figure",
   kind: figure,
-  caption: "Résultats de Random - MinMax sur 20 parties"
+  caption: "Résultats de Random - Minmax sur 20 parties"
 )<minmax_results>
+
+#pagebreak()
 
 == Negamax
 
-L'algorithme de Negamax est une simplification de l'algorithme MinMax. En effet, Negamax est une version simplifiée de MinMax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
+L'algorithme de Negamax est une simplification de l'algorithme Minmax. En effet, Negamax est une version simplifiée de Minmax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
 
 #figure(
   algorithm(
     caption: [Negamax],
-    pseudocode(
-      no-number,
-      [*entrées:* _nœud_ ; _profondeur_ ; $α$ ; $β$ ; _couleur_],
-      no-number,
-      [*sortie:* valeur heuristique de _nœud_],
-      [*si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*], ind,
-        [*retourner* _couleur_ $times$ heuristique(_nœud_)], ded,
-      [_valeur_ $ <- -∞$],
-      [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
-        [_valeur_ $<- $ max(v, $-$negamax(_enfant_, profondeur$-1$, $-β$, $-α$, $-$_couleur_))], ded,
-        [$α$ $<- $ max(α, _valeur_)],
-        [*si* $α$ $gt.eq β$ *alors*], ind,
-          [*sortir*], ded,
-      [*fin*],
-      [*retourner* _valeur_]
+    pseudocode-list([
+      - *Entrées:* _nœud_, _profondeur_, $α$, $β$, _couleur_
+      - *Sortie:* _entier_
+      + *debut*
+        + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+          + *retourner* _couleur_ $times$ heuristique(_nœud_)
+        + _valeur_ $ <- -infinity$
+        + *pour chaque* _enfant_ de _nœud_ *faire*
+          + _valeur_ $<- $ max(v, $-$negamax(_enfant_, profondeur$-1$, $-β$, $-α$, $-$_couleur_))
+          + $α$ $<- $ max(α, _valeur_)
+          + *si* $α gt.eq β$ *alors*
+            + *sortir*
+        + *retourner* _valeur_
+    ], indentation-guide-stroke: .5pt
   )
 ), 
   supplement: "Figure",
@@ -504,9 +500,28 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
 =======
 #pagebreak(weak: true)
 
+== Alpha-Beta
+
+L'algorithme Alpha-Beta ($alpha - beta$) est une amélioration de l'algorithme Minmax qui permet de réduire le nombre de nœuds explorés en éliminant les branches inutiles.
+
+L'algorithme Alpha-Beta possède plusieurs variantes qui permettent d'améliorer les performances de l'algorithme. 
+
+- *Alpha-Beta classique :* L'algorithme Alpha-Beta classique est l'algorithme de base. 
+
+- *Alpha-Beta absolue :* L'algorithme Alpha-Beta absolue est une variante de l'algorithme Alpha-Beta qui utilise une heuristique absolue. L'heuristique absolue est une heuristique qui prend en compte le nombre de pions de chaque joueur sur le plateau.
+
+- *Alpha-Beta de mobilité :* L'algorithme Alpha-Beta de mobilité est une variante de l'algorithme Alpha-Beta qui utilise une heuristique de mobilité. L'heuristique de mobilité est une heuristique qui prend en compte le nombre de coups possibles pour chaque joueur.
+
+- *Alpha-Beta mixte :* L'algorithme Alpha-Beta mixte est une variante de l'algorithme Alpha-Beta qui utilise une heuristique mixte. L'heuristique mixte est une combinaison de l'heuristique absolue et de l'heuristique de mobilité.
+
+Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer leurs performances.
+
 = Analyse des heuristiques
 
 == Heritage et changement d'heuristiques
+
+
+= Analyse des Résultats
 
 #figure(
   rect[
@@ -527,29 +542,7 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats d'$α - β$]
-)
-
-#figure(
-  rect[
-    ```
-    ========================== RÉCAPITULATIFS DES SCORES ==========================
-    20 match(s) gagné par les Noirs.
-    0 match(s) gagné par les Blanc.
-    0 match(s) nul(s).
-    ===================== RÉCAPITULATIFS DES AIRES PAR MATCH ======================
-    96.7188 % du terrain occupé par les Noirs en moyenne
-    2.42188 % du terrain occupé par les Blanc en moyenne
-    0.859375 % du terrain non-occupé en moyenne
-    ==================== RÉCAPITULATIFS DES TEMPS D'EXECUTION =====================
-    IA1 (alphabeta_mixte=10) mean calculation time per move : 30848.2 ms (680 moves played)
-    IA2 (random) mean calculation time per move : 0.00397053 ms (509 moves played)
-    ===============================================================================
-    ```
-  ],
-  supplement: "Figure",
-  kind: figure,
-  caption: [Résultats d'$α - β$ mixte]
+  caption: [Résultats de Alpha-Beta]
 )
 
 #figure(
@@ -571,7 +564,7 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats d'$α - β$ absolue]
+  caption: [Résultats de Alpha-Beta absolue]
 )
 
 #figure(
@@ -593,6 +586,28 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats d'$α - β$ mobilité]
+  caption: [Résultats de Alpha-Beta mobilité]
+)
+
+#figure(
+  rect[
+    ```
+    ========================== RÉCAPITULATIFS DES SCORES ==========================
+    20 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ===================== RÉCAPITULATIFS DES AIRES PAR MATCH ======================
+    96.7188 % du terrain occupé par les Noirs en moyenne
+    2.42188 % du terrain occupé par les Blanc en moyenne
+    0.859375 % du terrain non-occupé en moyenne
+    ==================== RÉCAPITULATIFS DES TEMPS D'EXECUTION =====================
+    IA1 (alphabeta_mixte=10) mean calculation time per move : 30848.2 ms (680 moves played)
+    IA2 (random) mean calculation time per move : 0.00397053 ms (509 moves played)
+    ===============================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Alpha-Beta mixte]
 )
 
