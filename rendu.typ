@@ -51,6 +51,10 @@ Cette partie du rapport detaillera les differents algorithme et structures mis e
 
 == Logique du jeu 
 
+// TODO : Ajouter regles du jeu / gameplay
+
+Chaque joueur, noir et blanc, pose l'un après l'autre un pion de sa couleur sur le plateau de jeu dit « l'othellier » selon des règles précises. Le jeu s'arrête quand les deux joueurs ne peuvent plus poser de pion. On compte alors le nombre de pions. Le joueur ayant le plus grand nombre de pions de sa couleur sur l'othellier a gagné.
+
 Othello etant un jeu simple, notre implémentation se base sur 3 structures detaillées ci dessous. Toutes ces stuctures et methodes font partie du namespace `othello`.
 
 === Enumeration `othello::pawn`
@@ -373,7 +377,7 @@ Les IA sont alors appelée par la methode `makeAMove` par l'application pour rec
 
 == Minmax
 Avant de procéder à l'implémentation de l'algorithme de Minmax il était judicieux de bien comprendre ce dernier.
-Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
+Nous avons donc commencé par mettre en place le pseudo-code #footnote[https://en.wikipedia.org/wiki/Minmax] de l'algorithme .
 
 #figure(
   algorithm(
@@ -382,7 +386,7 @@ Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
     - *entrées:* _nœud_, _profondeur_, _joueurMax_
     - *sortie:* _entier_
     + *debut*
-      + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+      + *si* _profondeur_ $= 0$ *ou* estTerminal(_nœud_) *alors*
         + *retourner* heuristique(_nœud_)
       + *si* _joueurMax_ *alors*
         + _valeur_ $ <- -infinity$
@@ -391,14 +395,14 @@ Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
       + *sinon*
         + _valeur_ $<- +infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
-          + _valeur_ $<- $ min(v, minmax(_enfant_, profondeur$-1$, Vrai))
+          + _valeur_ $<- $ min(v, minmax(_enfant_, _profondeur_ $-$ $1$, Vrai))
       + *retourner* _valeur_
     ], indentation-guide-stroke: .5pt
   )
 ),
   supplement: "Figure",
   kind: figure,
-  caption : [Algorithme Minmax]
+  caption : [Pseudocode Minmax]
 )
 
 En suite, nous avons implémenté l'algorithme en C++ en utilisant la classe `othello::Board` pour représenter le plateau de jeu et `othello:pawn` pour représenter le joueur qu'on veut maximiser.
@@ -430,53 +434,33 @@ if (player == team){
   caption : [`MinMax::minmax()` : Implémentation min/max du joueur],
 )
 
-La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entre une IA aléatoire et une IA Minmax avec une profondeur de 3.
-
-// TODO : Ajouter les résultats de minmax
-#figure(
-  rect[
-  ```
-  313 match(s) gagné par les Noirs.
-  648 match(s) gagné par les Blanc.
-  39 match(s) nul(s).
-  IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
-  IA2 (minmax=3) mean calculation time per move : 0.856059 ms (29983 moves played)
-  ```
-  ], 
-  supplement: "Figure",
-  kind: figure,
-  caption: "Résultats de Random - Minmax sur 20 parties"
-)<minmax_results>
-
 #pagebreak()
 
 == Negamax
 
-L'algorithme de Negamax est une simplification de l'algorithme Minmax. En effet, Negamax est une version simplifiée de Minmax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
+L'algorithme de Negamax est une simplification de l'algorithme Minmax. En effet, Negamax est une version simplifiée de Minmax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme, montré par le pseudocode #footnote[https://en.wikipedia.org/wiki/Negamax].
 
 #figure(
   algorithm(
     caption: [Negamax],
     pseudocode-list([
-      - *Entrées:* _nœud_, _profondeur_, $α$, $β$, _couleur_
+      - *Entrées:* _nœud_, _profondeur_, _couleur_
       - *Sortie:* _entier_
       + *debut*
-        + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+        + *si* _profondeur_ $= 0$ *ou* estTerminal(_nœud_) *alors*
           + *retourner* _couleur_ $times$ heuristique(_nœud_)
         + _valeur_ $ <- -infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
-          + _valeur_ $<- $ max(v, $-$negamax(_enfant_, profondeur$-1$, $-β$, $-α$, $-$_couleur_))
-          + $α$ $<- $ max(α, _valeur_)
-          + *si* $α gt.eq β$ *alors*
-            + *sortir*
+          + _valeur_ $<- $ max(v, $-$negamax(_enfant_, _profondeur_ $-$ $1$, $-$_couleur_))
         + *retourner* _valeur_
     ], indentation-guide-stroke: .5pt
   )
 ), 
   supplement: "Figure",
   kind: figure,
-  caption : [Algorithme Negamax]
+  caption : [Pseudocode Negamax]
 )
+
 
 Afin de simplifier l'algorithme la notion de couleur est introduite. La couleur est un entier qui vaut 1 si le joueur est le joueur maximisant et -1 si c'est le joueur minimisant.
 
