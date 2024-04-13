@@ -1,6 +1,7 @@
 #include "ia/interface.hpp"
 #include "ia/random.hpp"
 #include "ia/minmax.hpp"
+#include "ia/negamax.hpp"
 #include "ia/alphabeta.hpp"
 #include "ia/alphabeta_absolute.hpp"
 #include "ia/alphabeta_mobility.hpp"
@@ -24,6 +25,8 @@ IAInterface* IAInterface::selectByName(std::string name) {
         return (new Random());
     } else if(tokens[0] == "minmax"){
         return (new MinMax(std::stoi(tokens[1])));
+    } else if(tokens[0]=="negamax") {
+        return (new NegaMax(std::stoi(tokens[1])));
     } else if(tokens[0] == "alphabeta"){
         return (new AlphaBeta(std::stoi(tokens[1])));
     } else if(tokens[0] == "alphabeta_absolute"){
