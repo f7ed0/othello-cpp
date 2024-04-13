@@ -1,5 +1,7 @@
+#import "@preview/plotst:0.2.0": *
 #import "@preview/lovelace:0.2.0": *
 #show: setup-lovelace
+
 
 #align(center + top, text("Compte Rendu de Traveaux Pratiques - Fondement de l'IA"))
 #line(length: 100%)
@@ -536,11 +538,11 @@ L'algorithme Alpha-Beta propose plusieurs stratégies de recherche qui permetten
 
 == Heritage et changement d'heuristiques
 
-Les algorithme restent les même qu'importe les heuristiques utilisée. Nous avons donc créé des classes filles aux algorithme en "overridant" la fonction d'heuristique pour la changer.
+Les algorithmes restent les mêmes, peu importe les heuristiques utilisées. Nous avons donc créé des classes filles pour les algorithmes, où nous "overridons" la fonction d'heuristique afin de la modifier pour s'adapter à l'heuristique que nous voulons utiliser.
 
-Nous avons aussi fait le choix de n'utiliser que l'algorithme $alpha - beta$ puisque les trois algorithme ci dessus donnent les même résultats pour une heuristique donnée et que $alpha - beta$ est l'algorithme qui sera le plus rapide a exectuer. 
+Nous avons aussi fait le choix de n'utiliser que l'algorithme Alpha-Beta puisque les trois algorithme ci dessus donnent les même résultats pour une heuristique donnée et que Alpha-Beta est l'algorithme qui sera le plus rapide a exectuer. 
 
-Voici les stratégies de $alpha - beta$ que nous avons utilisées :
+Voici les stratégies de Alpha-Beta que nous avons utilisées :
 
 - *Alpha-Beta positionnel :* Cette stratégie se concentre sur la position des pièces sur le plateau et évalue leur importance stratégique en fonction de leur position relative et de leur potentiel de contrôle.
 
@@ -550,12 +552,64 @@ Voici les stratégies de $alpha - beta$ que nous avons utilisées :
 
 - *Alpha-Beta mixte :* Cette approche combine plusieurs heuristiques pour évaluer la position du jeu, telles que la mobilité, la stabilité des pièces et la position sur le plateau. Elle vise à fournir une évaluation plus globale et précise.
 
-Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer leurs performances.
-
-
+#pagebreak()
 
 = Analyse des Résultats
 
+Nous avons effectué des tests de benchmarking pour comparer les performances des différentes stratégies d'IA. Les tests ont été effectués sur un ensemble de parties jouées entre l'IA qui choisit ses coups de manière aléatoire, et les différentes IA qui utilisent des heuristiques, en utilisant des paramètres de profondeur de recherche variés.
+
+Les résultats des tests ont montré que les différentes stratégies d'IA ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les résultats détaillés des tests sont présentés dans la @resultats.
+
+
+
+// Graphiques
+
+#let data10 = (
+  (30848.2, "Alpha-Beta Mixte"),
+  (8838.38, "Alpha-Beta Mobilité"),
+  (1205.58, "Alpha-Beta Absolue"),
+  (16573.5, "Alpha-Beta")
+)
+
+#let y_axis10 = axis(values: ("", "Alpha-Beta Mixte", "Alpha-Beta Mobilité", "Alpha-Beta Absolue", "Alpha-Beta"), location: "left", show_markings: true, )
+
+#let x_axis10 = axis(min: 0, max: 35000, step: 5000, location: "bottom", helper_lines: true)
+
+#let pl10 = plot(axes: (x_axis10, y_axis10), data: data10)
+
+#figure(
+  bar_chart(pl10, (100%, 25%), fill: (blue, blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
+)
+
+#let data8 = (
+  (14385, "Minmax"),
+  (18345.5, "Negamax"),
+  (318.496, "Alpha-Beta"),
+)
+
+#let y_axis8 = axis(values: ("", "Minmax", "Negamax", "Alpha-Beta"), location: "left", show_markings: true, )
+
+#let x_axis8 = axis(min: 0, max: 20000, step: 2000, location: "bottom", helper_lines: true)
+
+#let pl8 = plot(axes: (x_axis8, y_axis8), data: data8)
+
+#figure(
+  bar_chart(pl8, (100%, 25%), fill: (blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 8]
+)
+
+// FIN Graphiques
+
+= Conclusion et Perspectives
+
+= Annexes
+
+== Résultats des tests <resultats>
 
 #figure(
   rect[
@@ -598,7 +652,7 @@ Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer l
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta absolue]
+  caption: [Résultats de Alpha-Beta Absolue]
 )
 
 #figure(
@@ -620,7 +674,7 @@ Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer l
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta mobilité]
+  caption: [Résultats de Alpha-Beta Mobilité]
 )
 
 #figure(
@@ -642,6 +696,71 @@ Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer l
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta mixte]
+  caption: [Résultats de Alpha-Beta Mixte]
 )
 
+#figure(
+  rect[
+    ```
+    ========================== RÉCAPITULATIFS DES SCORES ==========================
+    20 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ===================== RÉCAPITULATIFS DES AIRES PAR MATCH ======================
+    62.0312 % du terrain occupé par les Noirs en moyenne
+    37.9688 % du terrain occupé par les Blanc en moyenne
+    0 % du terrain non-occupé en moyenne
+    ==================== RÉCAPITULATIFS DES TEMPS D'EXECUTION =====================
+    IA1 (minmax=8) mean calculation time per move : 14385 ms (606 moves played)
+    IA2 (random) mean calculation time per move : 0.00394781 ms (594 moves played)
+    ===============================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Minmax]
+)
+
+#figure(
+  rect[
+    ```
+    =========================== RÉCAPITULATIFS DES SCORES ===========================
+    15 match(s) gagné par les Noirs.
+    4 match(s) gagné par les Blanc.
+    1 match(s) nul(s).
+    ====================== RÉCAPITULATIFS DES AIRES PAR MATCH =======================
+    64.7656 % du terrain occupé par les Noirs en moyenne
+    35.2344 % du terrain occupé par les Blanc en moyenne
+    0 % du terrain non-occupé en moyenne
+    ===================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
+    IA1 (negamax=8) mean calculation time per move : 18345.5 ms (612 moves played)
+    IA2 (random) mean calculation time per move : 0.00398299 ms (588 moves played)
+    =================================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Negamax]
+)
+
+#figure(
+  rect[
+    ```
+    =========================== RÉCAPITULATIFS DES SCORES ===========================
+    19 match(s) gagné par les Noirs.
+    1 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ====================== RÉCAPITULATIFS DES AIRES PAR MATCH =======================
+    62.1094 % du terrain occupé par les Noirs en moyenne
+    37.7344 % du terrain occupé par les Blanc en moyenne
+    0.15625 % du terrain non-occupé en moyenne
+    ===================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
+    IA1 (alphabeta=8) mean calculation time per move : 318.496 ms (606 moves played)
+    IA2 (random) mean calculation time per move : 0.0038902 ms (592 moves played)
+    =================================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Alpha-Beta]
+)
