@@ -607,6 +607,19 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 = Conclusion et Perspectives
 
+Dans le domaine de l'IA, il est largement admis que le meilleur algorithme d'Othello peut surpasser les joueurs humains les plus talentueux. Ce succès majeur dans la recherche en intelligence artificielle est illustré par l'utilisation de divers algorithmes dans cette étude sur Othello.
+
+Dans ce projet, nous avons implémenté plusieurs stratégies d'IA pour le jeu d'Othello en utilisant des algorithmes de recherche classiques tels que Minmax, Negamax et Alpha-Beta. Nous avons également exploré différentes heuristiques pour évaluer la position du jeu et guider les décisions de l'IA.
+
+Les résultats des tests de benchmarking ont montré que les différentes stratégies d'IA ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les stratégies basées sur l'algorithme Alpha-Beta ont généralement donné de meilleurs résultats en termes de temps de calcul et de qualité des coups joués.
+
+Pour les perspectives, il serait intéressant d'explorer d'autres heuristiques et d'autres algorithmes de recherche tel que la recherche arborescente Monte-Carlo pour améliorer les performances des IA. Il serait également intéressant d'explorer des approches d'apprentissage automatique pour entraîner des IA à jouer à Othello de manière plus efficace et stratégique.
+
+// TODO : Threading 
+
+// TODO : Plus de métriques
+// Intégrale de surface (maitrise a l'instant t de la game)
+
 = Annexes
 
 == Résultats des tests <resultats>
