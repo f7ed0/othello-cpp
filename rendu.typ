@@ -562,7 +562,7 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 
 
-// Graphiques
+// Graphique 1
 
 #let data10 = (
   (30848.2, "Alpha-Beta Mixte"),
@@ -577,13 +577,9 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 #let pl10 = plot(axes: (x_axis10, y_axis10), data: data10)
 
-#figure(
-  bar_chart(pl10, (100%, 25%), fill: (blue, blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
-  kind: figure,
-  supplement: "Figure",
-  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
-)
+// FIN Graphique 1
 
+// Graphique 2
 #let data8 = (
   (14385, "Minmax"),
   (18345.5, "Negamax"),
@@ -596,6 +592,8 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 #let pl8 = plot(axes: (x_axis8, y_axis8), data: data8)
 
+// FIN Graphique 2
+
 #figure(
   bar_chart(pl8, (100%, 25%), fill: (blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
   kind: figure,
@@ -603,7 +601,20 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
   caption: [Temps d'exécution moyen par coup (ms) : Profondeur 8]
 )
 
-// FIN Graphiques
+\
+
+Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Alpha-Beta Absolue et Alpha-Beta Mixte sont plus rapides. L'IA Alpha-Beta Mobilité est la plus rapide.
+
+#figure(
+  bar_chart(pl10, (100%, 25%), fill: (blue, blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
+)
+
+Dans le deuxième graphique, nous pouvons voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 8. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Minmax et Negamax sont plus rapides.
+
+#pagebreak()
 
 = Conclusion et Perspectives
 
@@ -619,6 +630,8 @@ Pour les perspectives, il serait intéressant d'explorer d'autres heuristiques e
 
 // TODO : Plus de métriques
 // Intégrale de surface (maitrise a l'instant t de la game)
+
+#pagebreak()
 
 = Annexes
 
