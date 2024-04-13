@@ -373,6 +373,10 @@ Les IA sont alors appelée par la methode `makeAMove` par l'application pour rec
   caption: [Execution des coups d'une IA en mode GUI]
 )
 
+
+
+
+
 #pagebreak()
 
 == Minmax
@@ -490,6 +494,14 @@ L'algorithme Alpha-Beta ($alpha - beta$) est une amélioration de l'algorithme M
 
 L'algorithme Alpha-Beta possède plusieurs variantes qui permettent d'améliorer les performances de l'algorithme. 
 
+== Heritage et changement d'heuristiques
+
+Les algorithme restent les même qu'importe les heuristiques utilisée. Nous avons donc créé des classes filles aux algorithme en "overridant" la fonction d'heuristique pour la changer.
+
+Nous avons aussi fait le choix de n'utiliser que l'algorithme $alpha - beta$ puisque les trois algorithme ci dessus donnent les même résultats pour une heuristique donnée et que $alpha - beta$ est l'algorithme qui sera le plus rapide a exectuer. 
+
+Voici les variantes de $alpha - beta$ que nous avons utilisées :
+
 - *Alpha-Beta classique :* L'algorithme Alpha-Beta classique est l'algorithme de base. 
 
 - *Alpha-Beta absolue :* L'algorithme Alpha-Beta absolue est une variante de l'algorithme Alpha-Beta qui utilise une heuristique absolue. L'heuristique absolue est une heuristique qui prend en compte le nombre de pions de chaque joueur sur le plateau.
@@ -500,12 +512,10 @@ L'algorithme Alpha-Beta possède plusieurs variantes qui permettent d'améliorer
 
 Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer leurs performances.
 
-= Analyse des heuristiques
-
-== Heritage et changement d'heuristiques
 
 
 = Analyse des Résultats
+
 
 #figure(
   rect[
