@@ -1,5 +1,7 @@
+#import "@preview/plotst:0.2.0": *
 #import "@preview/lovelace:0.2.0": *
 #show: setup-lovelace
+
 
 #align(center + top, text("Compte Rendu de Traveaux Pratiques - Fondement de l'IA"))
 #line(length: 100%)
@@ -50,6 +52,10 @@ Nous avons décidé d'utiliser le language C++ lors de ce TP pour sa rapiditée 
 Cette partie du rapport detaillera les differents algorithme et structures mis en place lors de ce projet pour faciliter l'interaction des IA avec le jeu.
 
 == Logique du jeu 
+
+// TODO : Ajouter regles du jeu / gameplay
+
+Chaque joueur, noir et blanc, pose l'un après l'autre un pion de sa couleur sur le plateau de jeu dit « l'othellier » selon des règles précises. Le jeu s'arrête quand les deux joueurs ne peuvent plus poser de pion. On compte alors le nombre de pions. Le joueur ayant le plus grand nombre de pions de sa couleur sur l'othellier a gagné.
 
 Othello etant un jeu simple, notre implémentation se base sur 3 structures detaillées ci dessous. Toutes ces stuctures et methodes font partie du namespace `othello`.
 
@@ -377,7 +383,7 @@ Les IA sont alors appelée par la methode `makeAMove` par l'application pour rec
 
 == Minmax
 Avant de procéder à l'implémentation de l'algorithme de Minmax il était judicieux de bien comprendre ce dernier.
-Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
+Nous avons donc commencé par mettre en place le pseudo-code #footnote[https://en.wikipedia.org/wiki/Minmax] de l'algorithme .
 
 #figure(
   algorithm(
@@ -386,23 +392,23 @@ Nous avons donc commencé par mettre en place le pseudo-code de l'algorithme.
     - *entrées:* _nœud_, _profondeur_, _joueurMax_
     - *sortie:* _entier_
     + *debut*
-      + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+      + *si* _profondeur_ $= 0$ *ou* estTerminal(_nœud_) *alors*
         + *retourner* heuristique(_nœud_)
       + *si* _joueurMax_ *alors*
         + _valeur_ $ <- -infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
-          + _valeur_ $<- $ max(v, minmax(_enfant_, profondeur$-1$, Faux))
+          + _valeur_ $<- $ max(v, minmax(_enfant_, _profondeur_ $-$ $1$, Faux))
       + *sinon*
         + _valeur_ $<- +infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
-          + _valeur_ $<- $ min(v, minmax(_enfant_, profondeur$-1$, Vrai))
+          + _valeur_ $<- $ min(v, minmax(_enfant_, _profondeur_ $-$ $1$, Vrai))
       + *retourner* _valeur_
     ], indentation-guide-stroke: .5pt
   )
 ),
   supplement: "Figure",
   kind: figure,
-  caption : [Algorithme Minmax]
+  caption : [Pseudocode Minmax]
 )
 
 En suite, nous avons implémenté l'algorithme en C++ en utilisant la classe `othello::Board` pour représenter le plateau de jeu et `othello:pawn` pour représenter le joueur qu'on veut maximiser.
@@ -434,53 +440,33 @@ if (player == team){
   caption : [`MinMax::minmax()` : Implémentation min/max du joueur],
 )
 
-La @minmax_results ci-dessous montre les résultats de 1000 parties jouées entre une IA aléatoire et une IA Minmax avec une profondeur de 3.
-
-// TODO : Ajouter les résultats de minmax
-#figure(
-  rect[
-  ```
-  313 match(s) gagné par les Noirs.
-  648 match(s) gagné par les Blanc.
-  39 match(s) nul(s).
-  IA1 (random) mean calculation time per move : 0.00389221 ms (29919 moves played)
-  IA2 (minmax=3) mean calculation time per move : 0.856059 ms (29983 moves played)
-  ```
-  ], 
-  supplement: "Figure",
-  kind: figure,
-  caption: "Résultats de Random - Minmax sur 20 parties"
-)<minmax_results>
-
 #pagebreak()
 
 == Negamax
 
-L'algorithme de Negamax est une simplification de l'algorithme Minmax. En effet, Negamax est une version simplifiée de Minmax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme.
+L'algorithme de Negamax est une simplification de l'algorithme Minmax. En effet, Negamax est une version simplifiée de Minmax où les valeurs des nœuds sont toujours positives. Cela permet de simplifier l'implémentation de l'algorithme, montré par le pseudocode #footnote[https://en.wikipedia.org/wiki/Negamax].
 
 #figure(
   algorithm(
     caption: [Negamax],
     pseudocode-list([
-      - *Entrées:* _nœud_, _profondeur_, $α$, $β$, _couleur_
+      - *Entrées:* _nœud_, _profondeur_, _couleur_
       - *Sortie:* _entier_
       + *debut*
-        + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+        + *si* _profondeur_ $= 0$ *ou* estTerminal(_nœud_) *alors*
           + *retourner* _couleur_ $times$ heuristique(_nœud_)
         + _valeur_ $ <- -infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
-          + _valeur_ $<- $ max(v, $-$negamax(_enfant_, profondeur$-1$, $-β$, $-α$, $-$_couleur_))
-          + $α$ $<- $ max(α, _valeur_)
-          + *si* $α gt.eq β$ *alors*
-            + *sortir*
+          + _valeur_ $<- $ max(v, $-$negamax(_enfant_, _profondeur_ $-$ $1$, $-$_couleur_))
         + *retourner* _valeur_
     ], indentation-guide-stroke: .5pt
   )
 ), 
   supplement: "Figure",
   kind: figure,
-  caption : [Algorithme Negamax]
+  caption : [Pseudocode Negamax]
 )
+
 
 Afin de simplifier l'algorithme la notion de couleur est introduite. La couleur est un entier qui vaut 1 si le joueur est le joueur maximisant et -1 si c'est le joueur minimisant.
 
@@ -506,32 +492,124 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
 
 == Alpha-Beta
 
-L'algorithme Alpha-Beta ($alpha - beta$) est une amélioration de l'algorithme Minmax qui permet de réduire le nombre de nœuds explorés en éliminant les branches inutiles.
+L'algorithme Alpha-Beta ($alpha - beta$) est une amélioration de l'algorithme Minmax qui permet de réduire le nombre de nœuds examinés. 
 
-L'algorithme Alpha-Beta possède plusieurs variantes qui permettent d'améliorer les performances de l'algorithme. 
+Il évalue les positions potentielles en considérant uniquement les coups les plus prometteurs pour un joueur tout en éliminant les branches moins intéressantes. En comparant les valeurs alpha (la meilleure valeur trouvée pour le joueur maximisant) et bêta (la meilleure valeur trouvée pour le joueur minimisant), l'algorithme peut couper les branches inutiles, améliorant ainsi l'efficacité de la recherche.
+
+Le pseudocode #footnote[https://en.wikipedia.org/wiki/Alpha-beta_pruning] de l'algorithme Alpha-Beta est le suivant :
+
+#figure(
+  algorithm(
+    caption: [Alpha-Beta],
+    pseudocode-list([
+      - *Entrées:* _nœud_, _profondeur_, $alpha$, $beta$, _joueurMax_
+      - *Sortie:* _entier_
+      + *debut*
+        + *si* _profondeur_ $eq 0$ *ou* estTerminal(_nœud_) *alors*
+          + *retourner* heuristique(_nœud_)
+        + *si* _joueurMax_ *alors*
+          + _valeur_ $ <- -infinity$
+          + *pour chaque* _enfant_ de _nœud_ *faire*
+            + _valeur_ $<- $ max(v, alphabeta(_enfant_, _profondeur_ $-$ $1$, $alpha$, $beta$, Faux))
+            + *si* _valeur_ $gt beta$ *alors*
+              + *retourner* _valeur_
+            + $alpha <- $ max($alpha$, _valeur_)
+          + *retourner* _valeur_
+        + *sinon*
+          + _valeur_ $<- +infinity$
+          + *pour chaque* _enfant_ de _nœud_ *faire*
+            + _valeur_ $<- $ min(v, alphabeta(_enfant_, _profondeur_ $-$ $1$, $alpha$, $beta$, Vrai))
+            + *si* _valeur_ $lt alpha$ *alors*
+              + *retourner* _valeur_
+            + $beta <- $ min($beta$, _valeur_)
+          + *retourner* _valeur_
+    ], indentation-guide-stroke: .5pt
+  )
+), 
+  supplement: "Figure",
+  kind: figure,
+  caption : [Pseudocode Alpha-Beta]
+)
+
+L'algorithme Alpha-Beta propose plusieurs stratégies de recherche qui permettent d'améliorer les résultats de l'algorithme. 
+
+#pagebreak()
+
 
 == Heritage et changement d'heuristiques
 
-Les algorithme restent les même qu'importe les heuristiques utilisée. Nous avons donc créé des classes filles aux algorithme en "overridant" la fonction d'heuristique pour la changer.
+Les algorithmes restent les mêmes, peu importe les heuristiques utilisées. Nous avons donc créé des classes filles pour les algorithmes, où nous "overridons" la fonction d'heuristique afin de la modifier pour s'adapter à l'heuristique que nous voulons utiliser.
 
-Nous avons aussi fait le choix de n'utiliser que l'algorithme $alpha - beta$ puisque les trois algorithme ci dessus donnent les même résultats pour une heuristique donnée et que $alpha - beta$ est l'algorithme qui sera le plus rapide a exectuer. 
+Nous avons aussi fait le choix de n'utiliser que l'algorithme Alpha-Beta puisque les trois algorithme ci dessus donnent les même résultats pour une heuristique donnée et que Alpha-Beta est l'algorithme qui sera le plus rapide a exectuer. 
 
-Voici les variantes de $alpha - beta$ que nous avons utilisées :
+Voici les stratégies de Alpha-Beta que nous avons utilisées :
 
-- *Alpha-Beta classique :* L'algorithme Alpha-Beta classique est l'algorithme de base. 
+- *Alpha-Beta positionnel :* Cette stratégie se concentre sur la position des pièces sur le plateau et évalue leur importance stratégique en fonction de leur position relative et de leur potentiel de contrôle.
 
-- *Alpha-Beta absolue :* L'algorithme Alpha-Beta absolue est une variante de l'algorithme Alpha-Beta qui utilise une heuristique absolue. L'heuristique absolue est une heuristique qui prend en compte le nombre de pions de chaque joueur sur le plateau.
+- *Alpha-Beta absolue :* Cette stratégie incorpore une évaluation absolue de la position en attribuant des valeurs numériques précises aux différentes configurations du jeu, sans tenir compte de la stratégie ou de la dynamique du jeu.
 
-- *Alpha-Beta de mobilité :* L'algorithme Alpha-Beta de mobilité est une variante de l'algorithme Alpha-Beta qui utilise une heuristique de mobilité. L'heuristique de mobilité est une heuristique qui prend en compte le nombre de coups possibles pour chaque joueur.
+- *Alpha-Beta de mobilité :* L'heuristique de la mobilité se concentre sur la capacité des joueurs à effectuer des mouvements dans le jeu. Elle favorise les positions qui offrent plus d'options de mouvement aux joueurs.
 
-- *Alpha-Beta mixte :* L'algorithme Alpha-Beta mixte est une variante de l'algorithme Alpha-Beta qui utilise une heuristique mixte. L'heuristique mixte est une combinaison de l'heuristique absolue et de l'heuristique de mobilité.
+- *Alpha-Beta mixte :* Cette approche combine plusieurs heuristiques pour évaluer la position du jeu, telles que la mobilité, la stabilité des pièces et la position sur le plateau. Elle vise à fournir une évaluation plus globale et précise.
 
-Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer leurs performances.
-
-
+#pagebreak()
 
 = Analyse des Résultats
 
+Nous avons effectué des tests de benchmarking pour comparer les performances des différentes stratégies d'IA. Les tests ont été effectués sur un ensemble de parties jouées entre l'IA qui choisit ses coups de manière aléatoire, et les différentes IA qui utilisent des heuristiques, en utilisant des paramètres de profondeur de recherche variés.
+
+Les résultats des tests ont montré que les différentes stratégies d'IA ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les résultats détaillés des tests sont présentés dans la @resultats.
+
+
+
+// Graphiques
+
+#let data10 = (
+  (30848.2, "Alpha-Beta Mixte"),
+  (8838.38, "Alpha-Beta Mobilité"),
+  (1205.58, "Alpha-Beta Absolue"),
+  (16573.5, "Alpha-Beta")
+)
+
+#let y_axis10 = axis(values: ("", "Alpha-Beta Mixte", "Alpha-Beta Mobilité", "Alpha-Beta Absolue", "Alpha-Beta"), location: "left", show_markings: true, )
+
+#let x_axis10 = axis(min: 0, max: 35000, step: 5000, location: "bottom", helper_lines: true)
+
+#let pl10 = plot(axes: (x_axis10, y_axis10), data: data10)
+
+#figure(
+  bar_chart(pl10, (100%, 25%), fill: (blue, blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
+)
+
+#let data8 = (
+  (14385, "Minmax"),
+  (18345.5, "Negamax"),
+  (318.496, "Alpha-Beta"),
+)
+
+#let y_axis8 = axis(values: ("", "Minmax", "Negamax", "Alpha-Beta"), location: "left", show_markings: true, )
+
+#let x_axis8 = axis(min: 0, max: 20000, step: 2000, location: "bottom", helper_lines: true)
+
+#let pl8 = plot(axes: (x_axis8, y_axis8), data: data8)
+
+#figure(
+  bar_chart(pl8, (100%, 25%), fill: (blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 8]
+)
+
+// FIN Graphiques
+
+= Conclusion et Perspectives
+
+= Annexes
+
+== Résultats des tests <resultats>
 
 #figure(
   rect[
@@ -574,7 +652,7 @@ Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer l
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta absolue]
+  caption: [Résultats de Alpha-Beta Absolue]
 )
 
 #figure(
@@ -596,7 +674,7 @@ Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer l
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta mobilité]
+  caption: [Résultats de Alpha-Beta Mobilité]
 )
 
 #figure(
@@ -618,6 +696,71 @@ Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer l
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta mixte]
+  caption: [Résultats de Alpha-Beta Mixte]
 )
 
+#figure(
+  rect[
+    ```
+    ========================== RÉCAPITULATIFS DES SCORES ==========================
+    20 match(s) gagné par les Noirs.
+    0 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ===================== RÉCAPITULATIFS DES AIRES PAR MATCH ======================
+    62.0312 % du terrain occupé par les Noirs en moyenne
+    37.9688 % du terrain occupé par les Blanc en moyenne
+    0 % du terrain non-occupé en moyenne
+    ==================== RÉCAPITULATIFS DES TEMPS D'EXECUTION =====================
+    IA1 (minmax=8) mean calculation time per move : 14385 ms (606 moves played)
+    IA2 (random) mean calculation time per move : 0.00394781 ms (594 moves played)
+    ===============================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Minmax]
+)
+
+#figure(
+  rect[
+    ```
+    =========================== RÉCAPITULATIFS DES SCORES ===========================
+    15 match(s) gagné par les Noirs.
+    4 match(s) gagné par les Blanc.
+    1 match(s) nul(s).
+    ====================== RÉCAPITULATIFS DES AIRES PAR MATCH =======================
+    64.7656 % du terrain occupé par les Noirs en moyenne
+    35.2344 % du terrain occupé par les Blanc en moyenne
+    0 % du terrain non-occupé en moyenne
+    ===================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
+    IA1 (negamax=8) mean calculation time per move : 18345.5 ms (612 moves played)
+    IA2 (random) mean calculation time per move : 0.00398299 ms (588 moves played)
+    =================================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Negamax]
+)
+
+#figure(
+  rect[
+    ```
+    =========================== RÉCAPITULATIFS DES SCORES ===========================
+    19 match(s) gagné par les Noirs.
+    1 match(s) gagné par les Blanc.
+    0 match(s) nul(s).
+    ====================== RÉCAPITULATIFS DES AIRES PAR MATCH =======================
+    62.1094 % du terrain occupé par les Noirs en moyenne
+    37.7344 % du terrain occupé par les Blanc en moyenne
+    0.15625 % du terrain non-occupé en moyenne
+    ===================== RÉCAPITULATIFS DES TEMPS D'EXECUTION ======================
+    IA1 (alphabeta=8) mean calculation time per move : 318.496 ms (606 moves played)
+    IA2 (random) mean calculation time per move : 0.0038902 ms (592 moves played)
+    =================================================================================
+    ```
+  ],
+  supplement: "Figure",
+  kind: figure,
+  caption: [Résultats de Alpha-Beta]
+)
