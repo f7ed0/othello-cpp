@@ -395,7 +395,7 @@ Nous avons donc commencé par mettre en place le pseudo-code #footnote[https://e
       + *si* _joueurMax_ *alors*
         + _valeur_ $ <- -infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
-          + _valeur_ $<- $ max(v, minmax(_enfant_, profondeur$-1$, Faux))
+          + _valeur_ $<- $ max(v, minmax(_enfant_, _profondeur_ $-$ $1$, Faux))
       + *sinon*
         + _valeur_ $<- +infinity$
         + *pour chaque* _enfant_ de _nœud_ *faire*
@@ -490,9 +490,49 @@ La couleur est utilisé pour inverser la valeur de la fonction heuristique si le
 
 == Alpha-Beta
 
-L'algorithme Alpha-Beta ($alpha - beta$) est une amélioration de l'algorithme Minmax qui permet de réduire le nombre de nœuds explorés en éliminant les branches inutiles.
+L'algorithme Alpha-Beta ($alpha - beta$) est une amélioration de l'algorithme Minmax qui permet de réduire le nombre de nœuds examinés. 
 
-L'algorithme Alpha-Beta possède plusieurs variantes qui permettent d'améliorer les performances de l'algorithme. 
+Il évalue les positions potentielles en considérant uniquement les coups les plus prometteurs pour un joueur tout en éliminant les branches moins intéressantes. En comparant les valeurs alpha (la meilleure valeur trouvée pour le joueur maximisant) et bêta (la meilleure valeur trouvée pour le joueur minimisant), l'algorithme peut couper les branches inutiles, améliorant ainsi l'efficacité de la recherche.
+
+Le pseudocode #footnote[https://en.wikipedia.org/wiki/Alpha-beta_pruning] de l'algorithme Alpha-Beta est le suivant :
+
+#figure(
+  algorithm(
+    caption: [Alpha-Beta],
+    pseudocode-list([
+      - *Entrées:* _nœud_, _profondeur_, $alpha$, $beta$, _joueurMax_
+      - *Sortie:* _entier_
+      + *debut*
+        + *si* _profondeur_ $eq 0$ *ou* estTerminal(_nœud_) *alors*
+          + *retourner* heuristique(_nœud_)
+        + *si* _joueurMax_ *alors*
+          + _valeur_ $ <- -infinity$
+          + *pour chaque* _enfant_ de _nœud_ *faire*
+            + _valeur_ $<- $ max(v, alphabeta(_enfant_, _profondeur_ $-$ $1$, $alpha$, $beta$, Faux))
+            + *si* _valeur_ $gt beta$ *alors*
+              + *retourner* _valeur_
+            + $alpha <- $ max($alpha$, _valeur_)
+          + *retourner* _valeur_
+        + *sinon*
+          + _valeur_ $<- +infinity$
+          + *pour chaque* _enfant_ de _nœud_ *faire*
+            + _valeur_ $<- $ min(v, alphabeta(_enfant_, _profondeur_ $-$ $1$, $alpha$, $beta$, Vrai))
+            + *si* _valeur_ $lt alpha$ *alors*
+              + *retourner* _valeur_
+            + $beta <- $ min($beta$, _valeur_)
+          + *retourner* _valeur_
+    ], indentation-guide-stroke: .5pt
+  )
+), 
+  supplement: "Figure",
+  kind: figure,
+  caption : [Pseudocode Alpha-Beta]
+)
+
+L'algorithme Alpha-Beta propose plusieurs stratégies de recherche qui permettent d'améliorer les résultats de l'algorithme. 
+
+#pagebreak()
+
 
 == Heritage et changement d'heuristiques
 
@@ -500,15 +540,15 @@ Les algorithme restent les même qu'importe les heuristiques utilisée. Nous avo
 
 Nous avons aussi fait le choix de n'utiliser que l'algorithme $alpha - beta$ puisque les trois algorithme ci dessus donnent les même résultats pour une heuristique donnée et que $alpha - beta$ est l'algorithme qui sera le plus rapide a exectuer. 
 
-Voici les variantes de $alpha - beta$ que nous avons utilisées :
+Voici les stratégies de $alpha - beta$ que nous avons utilisées :
 
-- *Alpha-Beta classique :* L'algorithme Alpha-Beta classique est l'algorithme de base. 
+- *Alpha-Beta positionnel :* Cette stratégie se concentre sur la position des pièces sur le plateau et évalue leur importance stratégique en fonction de leur position relative et de leur potentiel de contrôle.
 
-- *Alpha-Beta absolue :* L'algorithme Alpha-Beta absolue est une variante de l'algorithme Alpha-Beta qui utilise une heuristique absolue. L'heuristique absolue est une heuristique qui prend en compte le nombre de pions de chaque joueur sur le plateau.
+- *Alpha-Beta absolue :* Cette stratégie incorpore une évaluation absolue de la position en attribuant des valeurs numériques précises aux différentes configurations du jeu, sans tenir compte de la stratégie ou de la dynamique du jeu.
 
-- *Alpha-Beta de mobilité :* L'algorithme Alpha-Beta de mobilité est une variante de l'algorithme Alpha-Beta qui utilise une heuristique de mobilité. L'heuristique de mobilité est une heuristique qui prend en compte le nombre de coups possibles pour chaque joueur.
+- *Alpha-Beta de mobilité :* L'heuristique de la mobilité se concentre sur la capacité des joueurs à effectuer des mouvements dans le jeu. Elle favorise les positions qui offrent plus d'options de mouvement aux joueurs.
 
-- *Alpha-Beta mixte :* L'algorithme Alpha-Beta mixte est une variante de l'algorithme Alpha-Beta qui utilise une heuristique mixte. L'heuristique mixte est une combinaison de l'heuristique absolue et de l'heuristique de mobilité.
+- *Alpha-Beta mixte :* Cette approche combine plusieurs heuristiques pour évaluer la position du jeu, telles que la mobilité, la stabilité des pièces et la position sur le plateau. Elle vise à fournir une évaluation plus globale et précise.
 
 Nous avons implémenté ces variantes de l'algorithme Alpha-Beta pour comparer leurs performances.
 
