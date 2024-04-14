@@ -556,9 +556,9 @@ Voici les stratégies de Alpha-Beta que nous avons utilisées :
 
 = Analyse des Résultats
 
-Nous avons effectué des tests de benchmarking pour comparer les performances des différentes stratégies d'IA. Les tests ont été effectués sur un ensemble de parties jouées entre l'IA qui choisit ses coups de manière aléatoire, et les différentes IA qui utilisent des heuristiques, en utilisant des paramètres de profondeur de recherche variés.
+Nous avons effectué des tests de benchmarking pour comparer les performances des différentes heuristiques. Les tests ont été effectués sur un ensemble de parties jouées entre l'IA qui choisit ses coups de manière aléatoire, et les différentes IA qui utilisent des heuristiques, en utilisant des paramètres de profondeur de recherche variés.
 
-Les résultats des tests ont montré que les différentes stratégies d'IA ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les résultats détaillés des tests sont présentés dans la @resultats.
+Les résultats des tests ont montré que les différentes heuristiques ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les résultats détaillés des tests sont présentés dans la @resultats.
 
 // Graphique 1
 
@@ -617,9 +617,11 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 \
 
-Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Alpha-Beta Absolue et Alpha-Beta Mixte sont plus rapides. L'IA Alpha-Beta Mobilité est la plus rapide.
+Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'heuristique Mixte est la plus lente ce qui est logique car la verification du nombre de coup joué est couteuse, et que les IA Alpha-Beta Absolue et Alpha-Beta Positionelle sont plus rapides. L'heuristique de mobilité etant la plus simple est aussi la plus rapide.
 
 \
+
+En terme de performances, les IA ont gagné la totalitée de leur match ou e ont perdu qu'un seul. utliser cette metrique pour évaluer leur performance n'etait donc pas le plus optimal pour les départager. Nous avons alors utilisé le pourcentage de case occupée par les deux equipes à la fin des parties pour essayer de comprendre quelles heuristiques fonctionnaient le mieux.
 
 #figure(
   canvas({
@@ -639,7 +641,9 @@ Dans le premier graphique nous pouvions voir les temps d'execution moyen par cou
   caption: [Occupation moyenne du terrain par IA]
 )
 
-// TODO : Ajouter description
+On remarque plusieurs tendance grace a ce graphe. Premièrement, l'heuristique mixte qui combine astucieusement les 3 autres heuristiques fini en général avec la quasi totalitée du plateau couverte de ses pions. la deuxième est que l'heuristique positionelle gagne ces parties avec un nombre de pion bien plus faible que les autres heuristiques et que l'heuritique de mobilité fini ces parties avec 5% des cases vides, ce qui veut dire qu'elle arrive a faire en sorte que l'adversaire n'aie plus de coup avant que le plateau soit rempli.
+
+Ces quatres heuritiques ont des comportement différent que l'on remarque grace a cette metrique. Cependant, la quantité de pions a la fin de la partie n'est pas le meilleur indicateur de performance pour ce jeu car il suffit d'avoir plus de pion que son adversaire pour gagner et qu'une partie peut rapidement se faire retourner du fait des règles du jeu. Afin de faire une vraie analyse de performance, il y aurait fallu utiliser d'autres metriques.
 
 
 #figure(
