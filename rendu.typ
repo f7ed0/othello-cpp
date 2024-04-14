@@ -1,5 +1,5 @@
-#import "@preview/plotst:0.2.0": *
 #import "@preview/lovelace:0.2.0": *
+#import "@preview/cetz:0.2.2": canvas, draw, chart, palette
 #show: setup-lovelace
 
 
@@ -564,41 +564,55 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 // Graphique 1
 
-#let data10 = (
-  (30848.2, "Alpha-Beta Mixte"),
-  (8838.38, "Alpha-Beta Mobilité"),
-  (1205.58, "Alpha-Beta Absolue"),
-  (16573.5, "Alpha-Beta")
+#let data_10 = (
+  ([Alpha-Beta], 16573.5),
+  ([Alpha-Beta Absolue], 1205.58),
+  ([Alpha-Beta Mobilité], 8838.38),
+  ([Alpha-Beta Mixte], 30848.2)
 )
-
-#let y_axis10 = axis(values: ("", "Alpha-Beta Mixte", "Alpha-Beta Mobilité", "Alpha-Beta Absolue", "Alpha-Beta"), location: "left", show_markings: true, )
-
-#let x_axis10 = axis(min: 0, max: 35000, step: 5000, location: "bottom", helper_lines: true)
-
-#let pl10 = plot(axes: (x_axis10, y_axis10), data: data10)
 
 // FIN Graphique 1
 
 // Graphique 2
-#let data8 = (
-  (14385, "Minmax"),
-  (18345.5, "Negamax"),
-  (318.496, "Alpha-Beta"),
+
+#let data_8 = (
+  ([Alpha-Beta], 318.496),
+  ([Minmax], 14385),
+  ([Negamax], 8345.5)
 )
-
-#let y_axis8 = axis(values: ("", "Minmax", "Negamax", "Alpha-Beta"), location: "left", show_markings: true, )
-
-#let x_axis8 = axis(min: 0, max: 20000, step: 2000, location: "bottom", helper_lines: true)
-
-#let pl8 = plot(axes: (x_axis8, y_axis8), data: data8)
 
 // FIN Graphique 2
 
+// Graphique 3
+
+#let data_occupation = (
+  ([], 0, 0, 0),
+  ([Alpha-Beta], 62.9588, 0.859375, 36.1719),
+  ([Alpha-Beta Absolue], 82.3438, 2.03125, 15.625),
+  ([Alpha-Beta Mobilité], 83.3594, 5.46875, 11.1719),
+  ([Alpha-Beta Mixte], 96.7188, 0.859375, 2.42188)
+)
+
+// FIN Graphique 3
+
+#let colors = palette.new(colors: (blue, blue))
+#let colors_occup = palette.new(colors: (rgb("#0074d9"), rgb("#438EF6"), rgb("#68A9FF")))
+
 #figure(
-  bar_chart(pl8, (100%, 25%), fill: (blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  canvas({
+    draw.set-style(legend: (fill: white))
+    chart.barchart(mode: "basic",
+                  size: (10, auto),
+                  label-key: 0,
+                  value-key: 1,
+                  x-tick-step: 5000,
+                  bar-style: colors,
+                  data_10
+                )
+  }),
   kind: figure,
   supplement: "Figure",
-  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 8]
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
 )
 
 \
@@ -606,13 +620,46 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Alpha-Beta Absolue et Alpha-Beta Mixte sont plus rapides. L'IA Alpha-Beta Mobilité est la plus rapide.
 
 #figure(
-  bar_chart(pl10, (100%, 25%), fill: (blue, blue, blue, blue), bar_width: 50%, rotated: true, caption: none),
+  canvas({
+    draw.set-style(legend: (fill: white))
+    chart.barchart(mode: "basic",
+                  size: (10, auto),
+                  label-key: 0,
+                  value-key: 1,
+                  x-tick-step: 2000,
+                  bar-style: colors,
+                  data_8
+                )
+  }),
   kind: figure,
   supplement: "Figure",
-  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
+  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 8]
 )
 
 Dans le deuxième graphique, nous pouvons voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 8. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Minmax et Negamax sont plus rapides.
+
+
+#figure(
+  canvas({
+    draw.set-style(legend: (fill: white))
+    chart.barchart(mode: "stacked",
+                  size: (10, auto),
+                  label-key: 0,
+                  value-key: (..range(1, 4)),
+                  bar-style: colors_occup,
+                  x-tick-step: 10,
+                  data_occupation,
+                  labels: ([IA], [Vide], [Random]),
+                  legend: "legend.inner-north-east",)
+  }),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Occupation moyenne du terrain par IA]
+)
+
+
+
+
 
 #pagebreak()
 
