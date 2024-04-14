@@ -51,11 +51,18 @@ Nous avons décidé d'utiliser le language C++ lors de ce TP pour sa rapiditée 
 
 Cette partie du rapport detaillera les differents algorithme et structures mis en place lors de ce projet pour faciliter l'interaction des IA avec le jeu.
 
+Nous avons réparti les tâches entre nous comme suit :
+
+- *Développement du jeu :* Sylvain SAUSSE
+
+- *Développement des IA et des heuristiques :* Robin LAFONTAINE
+
+Chaque section du rapport a été rédigée par la personne responsable du développement de la partie correspondante.
+
 == Logique du jeu 
 
-// TODO : Ajouter regles du jeu / gameplay
 
-Chaque joueur, noir et blanc, pose l'un après l'autre un pion de sa couleur sur le plateau de jeu dit « l'othellier » selon des règles précises. Le jeu s'arrête quand les deux joueurs ne peuvent plus poser de pion. On compte alors le nombre de pions. Le joueur ayant le plus grand nombre de pions de sa couleur sur l'othellier a gagné.
+Othello est un jeu de stratégie abstrait joué par deux joueurs sur un plateau de 8 x 8 cases ou chaque joueur, noir et blanc, pose l'un après l'autre un pion de sa couleur sur le plateau de jeu dit « l'othellier » selon des règles précises. Le jeu s'arrête quand les deux joueurs ne peuvent plus poser de pion. On compte alors le nombre de pions. Le joueur ayant le plus grand nombre de pions de sa couleur sur l'othellier a gagné.
 
 Othello etant un jeu simple, notre implémentation se base sur 3 structures detaillées ci dessous. Toutes ces stuctures et methodes font partie du namespace `othello`.
 
