@@ -618,7 +618,7 @@ Les résultats des tests ont montré que les différentes heuristiques ont des p
   }),
   kind: figure,
   supplement: "Figure",
-  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
+  caption: [Temps d'exécution moyen par coup (ms) `depth=10`]
 )
 
 Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'heuristique Mixte est la plus lente ce qui est logique car la verification du nombre de coup joué est couteuse, et que les IA Alpha-Beta Absolue et Alpha-Beta Positionelle sont plus rapides. L'heuristique de mobilité etant la plus simple est aussi la plus rapide.
@@ -640,7 +640,7 @@ En termes de performances, les IA ont remporté la totalité de leurs matchs ou 
   }),
   kind: figure,
   supplement: "Figure",
-  caption: [Occupation moyenne du terrain par IA]
+  caption: [Occupation moyenne du terrain par IA (%)]
 )
 
 On remarque plusieurs tendances grâce à ce graphe. Premièrement, l'heuristique mixte, qui combine astucieusement les 3 autres heuristiques, finit en général avec la quasi totalité du plateau couverte de ses pions. La deuxième est que l'heuristique positionnelle gagne ses parties avec un nombre de pions bien plus faible que les autres heuristiques, et que l'heuristique de mobilité finit ses parties avec seulement 5% des cases vides, ce qui signifie qu'elle parvient à bloquer l'adversaire avant que le plateau soit rempli.
@@ -663,7 +663,7 @@ Ces quatre heuristiques ont des comportements différents que l'on remarque grâ
   }),
   kind: figure,
   supplement: "Figure",
-  caption: [Temps d'exécution moyen par coup (ms) : Profondeur 8]
+  caption: [Temps d'exécution moyen par coup (ms) `depth=8`]
 )
 
 Dans le deuxième graphique, nous pouvons voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 8. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Minmax et Negamax sont plus rapides.
@@ -714,7 +714,7 @@ Le code source complet du projet est disponible sur notre dépôt #link("https:/
   ],
   supplement: "Figure",
   kind: figure,
-  caption: [Résultats de Alpha-Beta]
+  caption: [Résultats de Alpha-Beta Positionel]
 )
 
 #figure(
