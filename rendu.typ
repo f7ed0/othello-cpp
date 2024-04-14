@@ -628,7 +628,7 @@ En ce qui concerne les perspectives, il serait intéressant d'explorer davantage
 
 De plus, l'amélioration de la gestion des threads pourrait permettre à l'IA de jouer de manière plus fluide et efficace. En effet, l'utilisation de threads peut entraîner des problèmes de synchronisation et de performance susceptibles d'impacter les performances de l'IA.
 
-Enfin, l'exploration de nouvelles métriques pour évaluer les performances des IA, telles que l'intégrale de surface qui mesure la maîtrise de l'IA à un instant donné de la partie, pourrait fournir une mesure plus fine de la qualité des coups joués par l'IA et de son efficacité stratégique.
+Enfin, l'exploration de nouvelles métriques pour évaluer les performances des IA, telles que la moyenne des cases occupées tout au long de la partie pourrait aider a mesurer la maîtrise de l'IA et donc pourrait fournir une mesure plus fine de la qualité des coups joués par l'IA et de son efficacité stratégique.
 
 
 #pagebreak()
