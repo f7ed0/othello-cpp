@@ -560,8 +560,6 @@ Nous avons effectué des tests de benchmarking pour comparer les performances de
 
 Les résultats des tests ont montré que les différentes stratégies d'IA ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les résultats détaillés des tests sont présentés dans la @resultats.
 
-
-
 // Graphique 1
 
 #let data_10 = (
@@ -598,6 +596,8 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 #let colors = palette.new(colors: (blue, blue))
 #let colors_occup = palette.new(colors: (rgb("#0074d9"), rgb("#438EF6"), rgb("#68A9FF")))
 
+\
+
 #figure(
   canvas({
     draw.set-style(legend: (fill: white))
@@ -619,6 +619,29 @@ Les résultats des tests ont montré que les différentes stratégies d'IA ont d
 
 Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Alpha-Beta Absolue et Alpha-Beta Mixte sont plus rapides. L'IA Alpha-Beta Mobilité est la plus rapide.
 
+\
+
+#figure(
+  canvas({
+    draw.set-style(legend: (fill: white))
+    chart.barchart(mode: "stacked",
+                  size: (10, auto),
+                  label-key: 0,
+                  value-key: (..range(1, 4)),
+                  bar-style: colors_occup,
+                  x-tick-step: 10,
+                  data_occupation,
+                  labels: ([IA], [Vide], [Random]),
+                  legend: "legend.inner-north-east",)
+  }),
+  kind: figure,
+  supplement: "Figure",
+  caption: [Occupation moyenne du terrain par IA]
+)
+
+// TODO : Ajouter description
+
+
 #figure(
   canvas({
     draw.set-style(legend: (fill: white))
@@ -639,28 +662,6 @@ Dans le premier graphique nous pouvions voir les temps d'execution moyen par cou
 Dans le deuxième graphique, nous pouvons voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 8. On peut voir que l'IA Alpha-Beta est la plus lente, mais que les IA Minmax et Negamax sont plus rapides.
 
 
-#figure(
-  canvas({
-    draw.set-style(legend: (fill: white))
-    chart.barchart(mode: "stacked",
-                  size: (10, auto),
-                  label-key: 0,
-                  value-key: (..range(1, 4)),
-                  bar-style: colors_occup,
-                  x-tick-step: 10,
-                  data_occupation,
-                  labels: ([IA], [Vide], [Random]),
-                  legend: "legend.inner-north-east",)
-  }),
-  kind: figure,
-  supplement: "Figure",
-  caption: [Occupation moyenne du terrain par IA]
-)
-
-
-
-
-
 #pagebreak()
 
 = Conclusion et Perspectives
@@ -676,7 +677,6 @@ En ce qui concerne les perspectives, il serait intéressant d'explorer davantage
 De plus, l'amélioration de la gestion des threads pourrait permettre à l'IA de jouer de manière plus fluide et efficace. En effet, l'utilisation de threads peut entraîner des problèmes de synchronisation et de performance susceptibles d'impacter les performances de l'IA.
 
 Enfin, l'exploration de nouvelles métriques pour évaluer les performances des IA, telles que la moyenne des cases occupées tout au long de la partie pourrait aider a mesurer la maîtrise de l'IA et donc pourrait fournir une mesure plus fine de la qualité des coups joués par l'IA et de son efficacité stratégique.
-
 
 #pagebreak()
 
