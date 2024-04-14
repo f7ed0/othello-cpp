@@ -620,16 +620,16 @@ Dans le deuxième graphique, nous pouvons voir les temps d'execution moyen par c
 
 Dans le domaine de l'IA, il est largement admis que le meilleur algorithme d'Othello peut surpasser les joueurs humains les plus talentueux. Ce succès majeur dans la recherche en intelligence artificielle est illustré par l'utilisation de divers algorithmes dans cette étude sur Othello.
 
-Dans ce projet, nous avons implémenté plusieurs stratégies d'IA pour le jeu d'Othello en utilisant des algorithmes de recherche classiques tels que Minmax, Negamax et Alpha-Beta. Nous avons également exploré différentes heuristiques pour évaluer la position du jeu et guider les décisions de l'IA.
+Dans ce projet, nous avons mis en œuvre plusieurs stratégies d'IA pour le jeu d'Othello en utilisant des algorithmes de recherche classiques tels que Minmax, Negamax et Alpha-Beta. Nous avons également exploré diverses heuristiques pour évaluer la position du jeu et orienter les décisions de l'IA.
 
-Les résultats des tests de benchmarking ont montré que les différentes stratégies d'IA ont des performances variables en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. Les stratégies basées sur l'algorithme Alpha-Beta ont généralement donné de meilleurs résultats en termes de temps de calcul et de qualité des coups joués.
+Les résultats des tests de benchmarking ont révélé des performances variables entre les différentes stratégies d'IA, en termes de temps de calcul par coup, de taux de victoire et de qualité des coups joués. En général, les stratégies basées sur l'algorithme Alpha-Beta ont produit de meilleurs résultats en matière de temps de calcul et de qualité des coups joués.
 
-Pour les perspectives, il serait intéressant d'explorer d'autres heuristiques et d'autres algorithmes de recherche tel que la recherche arborescente Monte-Carlo pour améliorer les performances des IA. Il serait également intéressant d'explorer des approches d'apprentissage automatique pour entraîner des IA à jouer à Othello de manière plus efficace et stratégique.
+En ce qui concerne les perspectives, il serait intéressant d'explorer davantage d'heuristiques et d'autres algorithmes de recherche, tels que la recherche arborescente Monte-Carlo, afin d'améliorer les performances des IA. L'exploration d'approches d'apprentissage automatique pour entraîner les IA à jouer à Othello de manière plus efficace et stratégique serait également pertinente.
 
-// TODO : Threading 
+De plus, l'amélioration de la gestion des threads pourrait permettre à l'IA de jouer de manière plus fluide et efficace. En effet, l'utilisation de threads peut entraîner des problèmes de synchronisation et de performance susceptibles d'impacter les performances de l'IA.
 
-// TODO : Plus de métriques
-// Intégrale de surface (maitrise a l'instant t de la game)
+Enfin, l'exploration de nouvelles métriques pour évaluer les performances des IA, telles que l'intégrale de surface qui mesure la maîtrise de l'IA à un instant donné de la partie, pourrait fournir une mesure plus fine de la qualité des coups joués par l'IA et de son efficacité stratégique.
+
 
 #pagebreak()
 
