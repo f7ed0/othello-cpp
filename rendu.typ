@@ -544,9 +544,9 @@ Nous avons aussi fait le choix de n'utiliser que l'algorithme Alpha-Beta puisque
 
 Voici les stratégies de Alpha-Beta que nous avons utilisées :
 
-- *Alpha-Beta positionnel :* Cette stratégie se concentre sur la position des pièces sur le plateau et évalue leur importance stratégique en fonction de leur position relative et de leur potentiel de contrôle.
+- *Alpha-Beta positionnel :* La stratégie positionnelle se concentre sur la position des pièces sur le plateau et évalue leur importance stratégique en fonction de leur position relative et de leur potentiel de contrôle.
 
-- *Alpha-Beta absolue :* Cette stratégie incorpore une évaluation absolue de la position en attribuant des valeurs numériques précises aux différentes configurations du jeu, sans tenir compte de la stratégie ou de la dynamique du jeu.
+- *Alpha-Beta absolue :* La stratégie absolue incorpore une évaluation absolue de la position en attribuant des valeurs numériques précises aux différentes configurations du jeu, sans tenir compte de la stratégie ou de la dynamique du jeu.
 
 - *Alpha-Beta de mobilité :* L'heuristique de la mobilité se concentre sur la capacité des joueurs à effectuer des mouvements dans le jeu. Elle favorise les positions qui offrent plus d'options de mouvement aux joueurs.
 
@@ -563,7 +563,7 @@ Les résultats des tests ont montré que les différentes heuristiques ont des p
 // Graphique 1
 
 #let data_10 = (
-  ([Alpha-Beta], 16573.5),
+  ([Alpha-Beta Positionel], 16573.5),
   ([Alpha-Beta Absolue], 1205.58),
   ([Alpha-Beta Mobilité], 8838.38),
   ([Alpha-Beta Mixte], 30848.2)
@@ -585,7 +585,7 @@ Les résultats des tests ont montré que les différentes heuristiques ont des p
 
 #let data_occupation = (
   ([], 0, 0, 0),
-  ([Alpha-Beta], 62.9588, 0.859375, 36.1719),
+  ([Alpha-Beta Positionel], 62.9588, 0.859375, 36.1719),
   ([Alpha-Beta Absolue], 82.3438, 2.03125, 15.625),
   ([Alpha-Beta Mobilité], 83.3594, 5.46875, 11.1719),
   ([Alpha-Beta Mixte], 96.7188, 0.859375, 2.42188)
@@ -596,7 +596,6 @@ Les résultats des tests ont montré que les différentes heuristiques ont des p
 #let colors = palette.new(colors: (blue, blue))
 #let colors_occup = palette.new(colors: (rgb("#0074d9"), rgb("#438EF6"), rgb("#68A9FF")))
 
-\
 
 #figure(
   canvas({
@@ -615,13 +614,9 @@ Les résultats des tests ont montré que les différentes heuristiques ont des p
   caption: [Temps d'exécution moyen par coup (ms) : Profondeur 10]
 )
 
-\
-
 Dans le premier graphique nous pouvions voir les temps d'execution moyen par coup pour les différentes IA à une profondeur de 10. On peut voir que l'heuristique Mixte est la plus lente ce qui est logique car la verification du nombre de coup joué est couteuse, et que les IA Alpha-Beta Absolue et Alpha-Beta Positionelle sont plus rapides. L'heuristique de mobilité etant la plus simple est aussi la plus rapide.
 
-\
-
-En terme de performances, les IA ont gagné la totalitée de leur match ou e ont perdu qu'un seul. utliser cette metrique pour évaluer leur performance n'etait donc pas le plus optimal pour les départager. Nous avons alors utilisé le pourcentage de case occupée par les deux equipes à la fin des parties pour essayer de comprendre quelles heuristiques fonctionnaient le mieux.
+En termes de performances, les IA ont remporté la totalité de leurs matchs ou n'en ont perdu qu'un seul. Utiliser cette métrique pour évaluer leur performance n'était donc pas le plus optimal pour les départager. Nous avons alors utilisé le pourcentage de cases occupées par les deux équipes à la fin des parties pour essayer de comprendre quelles heuristiques fonctionnaient le mieux.
 
 #figure(
   canvas({
@@ -641,10 +636,11 @@ En terme de performances, les IA ont gagné la totalitée de leur match ou e ont
   caption: [Occupation moyenne du terrain par IA]
 )
 
-On remarque plusieurs tendance grace a ce graphe. Premièrement, l'heuristique mixte qui combine astucieusement les 3 autres heuristiques fini en général avec la quasi totalitée du plateau couverte de ses pions. la deuxième est que l'heuristique positionelle gagne ces parties avec un nombre de pion bien plus faible que les autres heuristiques et que l'heuritique de mobilité fini ces parties avec 5% des cases vides, ce qui veut dire qu'elle arrive a faire en sorte que l'adversaire n'aie plus de coup avant que le plateau soit rempli.
+On remarque plusieurs tendances grâce à ce graphe. Premièrement, l'heuristique mixte, qui combine astucieusement les 3 autres heuristiques, finit en général avec la quasi totalité du plateau couverte de ses pions. La deuxième est que l'heuristique positionnelle gagne ses parties avec un nombre de pions bien plus faible que les autres heuristiques, et que l'heuristique de mobilité finit ses parties avec seulement 5% des cases vides, ce qui signifie qu'elle parvient à bloquer l'adversaire avant que le plateau soit rempli.
 
-Ces quatres heuritiques ont des comportement différent que l'on remarque grace a cette metrique. Cependant, la quantité de pions a la fin de la partie n'est pas le meilleur indicateur de performance pour ce jeu car il suffit d'avoir plus de pion que son adversaire pour gagner et qu'une partie peut rapidement se faire retourner du fait des règles du jeu. Afin de faire une vraie analyse de performance, il y aurait fallu utiliser d'autres metriques.
+Ces quatre heuristiques ont des comportements différents que l'on remarque grâce à cette métrique. Cependant, la quantité de pions à la fin de la partie n'est pas le meilleur indicateur de performance pour ce jeu, car il suffit d'avoir plus de pions que son adversaire pour gagner et qu'une partie peut rapidement s'inverser en raison des règles du jeu. Pour une analyse de performance plus approfondie, il aurait fallu utiliser d'autres métriques.
 
+\
 
 #figure(
   canvas({
