@@ -682,6 +682,10 @@ Enfin, l'exploration de nouvelles métriques pour évaluer les performances des 
 
 = Annexes
 
+== Code source
+
+Le code source complet du projet est disponible sur notre dépôt #link("https://github.com/f7ed0/othello-cpp")[Github] #footnote("https://github.com/f7ed0/othello-cpp")
+
 == Résultats des tests <resultats>
 
 #figure(
